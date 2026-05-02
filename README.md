@@ -1,2 +1,5 @@
 # PuzzleBobble
 パズルボブルーーー
+
+
+nnnnnnnnnnnnnnnnnnnnnnnnnnn
