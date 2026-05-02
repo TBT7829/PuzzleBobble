@@ -2,4 +2,4 @@
 パズルボブルーーー
 
 
-nnnnnnnnnnnnnnnnnnnnnnnnnnn
+レポレポレポレポレポレポレポレポレポ
