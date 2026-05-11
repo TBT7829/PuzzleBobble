@@ -153,11 +153,15 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Ball.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
     <ClCompile Include="CheckHitBall2_CheckNearest.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="FallBallSample.cpp" />
     <ClCompile Include="Float2.cpp" />
+    <ClCompile Include="function.cpp" />
     <ClCompile Include="hitFunc.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="main.cpp">
@@ -175,15 +179,29 @@
     <ClCompile Include="SearchRecursive.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="SearchRecursive_erase.cpp" />
+    <ClCompile Include="SearchRecursive_erase.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="ShotAdsorption.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="Task.cpp" />
+    <ClCompile Include="TaskManager.cpp" />
+    <ClCompile Include="variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dxlib\DxLib.h" />
-    <ClInclude Include="Ball.h" />
+    <ClInclude Include="Ball.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="const.h" />
     <ClInclude Include="Float2.h" />
+    <ClInclude Include="function.h" />
     <ClInclude Include="hitFunc.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="Task.h" />
+    <ClInclude Include="TaskManager.h" />
+    <ClInclude Include="variable.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

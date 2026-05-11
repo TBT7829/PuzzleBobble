@@ -1,4 +1,6 @@
 #include "const.h"
+#include "Task.h"
+#include "TaskManager.h"
 #include "keyManager.h"
 #include "hitFunc.h"
 #include "dxlib/DxLib.h"
@@ -40,7 +42,7 @@ const int dirEven[DIR_MAX][2] = {
 	{0, 1},		// 右
 	{-1, -1},	// 左上
 	{-1, 0},	// 右上
-	
+
 };
 
 // 奇数行 (y, x) または (row, col)
@@ -67,16 +69,64 @@ public:
 	// 行(Row)と列(Col)から、画面上のXY座標を計算して第三、四引数に入れてやる
 	void GetBubblePos(int row, int col, float& x, float& y) {
 		int offsetX = (row % 2 == 0) ? BALL_RADIUS : BALL_RADIUS * 2.0f;
-		float x = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
-		float y = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
+		x = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
+		y = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
 	}
 	// 探索されているかのフラグ
 	bool isCheck;
 	bool isSelect;
 	int colNum;
 
+
+
 };
 
+// しっかりと機能分けなどをするならDrawableを継承させて作る
+class FallBall : public Task
+{
+public:
+	FallBall(int taskId, float x, float y, float _wait) : Task(taskId)
+	{
+		pos.x = x;
+		pos.y = y;
+		wait = _wait;
+		moveVec.x = moveVec.y = 1.0f;
+	}
+	virtual ~FallBall()
+	{
+
+	}
+
+	virtual void update()
+	{
+		if (0 < wait) {
+			wait -= 1.0f;
+		}
+		else {
+			pos.y += moveVec.y;
+			moveVec.y += 0.8f;
+			if (WINDOW_HEIGHT < pos.y) {
+				TaskManager::getInstance()->kill(getTaskId());
+			}
+		}
+		
+	}
+
+	virtual void render()
+	{
+		DrawCircle(pos.x, pos.y, BALL_RADIUS, 0xFF00FF);
+	}
+
+	virtual void eventProc(Event* pEvent)
+	{
+
+	}
+
+	Float2 pos;
+	Float2 moveVec;
+	float wait;
+
+};
 
 // 一番距離が小さかったボールの行の数を保存する変数
 int nearestBallRow = -1;
@@ -193,7 +243,7 @@ int checkIsolatedBall()
 		// 再起処理で繋がっているボールを探索
 		_checkIsolatedBall(0, col, findNum);
 	}
-	
+
 
 
 	return findNum;
@@ -224,7 +274,7 @@ void _checkIsolatedBall(int row, int col, int& findNum)
 
 	// 繋がっているボールを見つけたカウントを足す
 	findNum++;
-	
+
 	// 隣接6方向の探索
 	// offsetX = (row % 2 == 0) ? BALL_RADIUS : BALL_RADIUS * 2.0f;
 	// この描画方式に合わせて偶数行/奇数行で隣接を分ける
@@ -241,7 +291,7 @@ void _checkIsolatedBall(int row, int col, int& findNum)
 	for (int i = 0; i < 6; ++i) {
 		int nr = row + dir[i][0];
 		int nc = col + dir[i][1];
-		
+
 		// 再起探索
 		_checkIsolatedBall(nr, nc, findNum);
 	}
@@ -303,7 +353,7 @@ void Init()
 	ballTable[4][5].colNum = 3;
 	ballTable[4][6].colNum = 1;
 	ballTable[4][7].colNum = 3;
-	
+
 	ballTable[5][3].colNum = 2;
 
 	ballTable[6][3].colNum = 1;
@@ -322,6 +372,8 @@ void Init()
 //--------------------------------------------------------------
 void Update()
 {
+	TaskManager* pTM = TaskManager::getInstance();
+
 	int x, y;
 	GetMousePoint(&x, &y);
 	float mouseX = (float)x;
@@ -405,23 +457,40 @@ void Update()
 			// 0行目の各ボールから探索をかけて孤立しているボールがいるかどうかを探す
 			checkIsolatedBall();
 
-			// checkIsolatedBallで孤立しているボールの探索が終わったので
-			// isCheckがfalseになっている(繋がっておらず孤立している)ボールを
-			// 探し削除する(処理をもっと分ける方が良さそう)
-			for (Ball(&row)[8] : ballTable) {
-				for (Ball& curBall : row) {
-					if (curBall.isCheck == false) {
-						curBall.colNum = 0;
+			{
+				//	何番目に落ちるかを保存する変数
+				float orderNum = 0.0f;
+				// パズルボブルAc版では下の行、右側優先の順番でボールが落ちていくので右下からforループを回す
+				for (int row = BALL_TABLE_ROW - 1; 0 <= row; row--) {
+					Ball* pCurRow = ballTable[row];
+					for (int col = BALL_TABLE_COL - 1; 0 <= col; col--) {
+						Ball* pBall = &pCurRow[col];
+						// ボールがある、かつ探索されていないかをチェック
+						if (0 < pBall->colNum && pBall->isCheck == false) {
+							// 探索されていないボールが見つかったため、
+							// FallBallを生成しながら落とす
+							orderNum += 1.0f;
+
+							// 落ちるまでの待ち時間
+							int wait = orderNum * 1.0f;
+							float x, y;
+							pBall->GetBubblePos(row, col, x, y);
+							// FallBallを生成
+							pTM->add(new FallBall(pTM->generateId(), x, y, wait));
+							// Ballを消す
+							pBall->colNum = 0;
+
+						}
 					}
 				}
 			}
-
+			
 
 			// if文の処理終了地点
 		}
-		
-		
-		
+
+
+
 	}
 
 }
@@ -464,9 +533,11 @@ void Draw()
 	DrawCircle(mouseX, mouseY, BALL_RADIUS, 0xFFFFFF);
 
 	DrawLine(WINDOW_WIDTH * 0.5f - 200, 0, WINDOW_WIDTH * 0.5f - 200, WINDOW_HEIGHT, 0xFFFFFF);
-	DrawLine(WINDOW_WIDTH * 0.5f +  60, 0, WINDOW_WIDTH * 0.5f +  60, WINDOW_HEIGHT, 0xFFFFFF);
+	DrawLine(WINDOW_WIDTH * 0.5f + 60, 0, WINDOW_WIDTH * 0.5f + 60, WINDOW_HEIGHT, 0xFFFFFF);
 }
 
+
+TaskManager* pTM = TaskManager::getInstance();
 
 
 // それが出来たら再帰的に探索していく
@@ -503,6 +574,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		//---------------------------------------
 		Update();
 
+		pTM->updateAll();
 
 
 		//---------------------------------------
@@ -513,7 +585,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		// ↑ 画面消去 ↑
 		//---------------------------------------
 		Draw();
-
+		pTM->renderAll();
 
 		ScreenFlip();
 	}

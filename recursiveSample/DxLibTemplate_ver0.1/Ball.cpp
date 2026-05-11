@@ -2,6 +2,7 @@
 #include "dxlib/DxLib.h"
 #include <algorithm>
 
+/*
 Ball::Ball(int x_, int y_, int radius_)
 {
 	x = x_;
@@ -90,3 +91,5 @@ void Ball::Unselect()
 {
 	selected = false;
 }
+*/
+

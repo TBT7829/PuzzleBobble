@@ -1,6 +1,8 @@
 #pragma once
 #include <array>
 
+//main1を起動するときはこちらのBallクラスを使用する
+/*
 class Ball
 {
 public:
@@ -22,4 +24,6 @@ public:
 	unsigned int color = 0x00;
 	int frame = -1;
 };
+*/
 
+class Ball
