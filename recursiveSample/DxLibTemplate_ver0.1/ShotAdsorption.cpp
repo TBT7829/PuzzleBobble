@@ -1,33 +1,43 @@
-#include "const.h"
+ï»¿#include "const.h"
 #include "keyManager.h"
 #include "hitFunc.h"
 #include "dxlib/DxLib.h"
+#include "Task.h"
+#include "TaskManager.h"
 #include <cmath>
 
 const int WINDOW_WIDTH_HALF = WINDOW_WIDTH * 0.5f;
 const int WINDOW_HEIGHT_HALF = WINDOW_HEIGHT * 0.5f;
 
-const int BALL_OFFSET_X = 315;
-// ƒoƒuƒ‹‚ÌˆÚ“®ƒXƒs[ƒh
+// å£ã‹ã‚‰ãƒœãƒ¼ãƒ«ã®åŠå¾„åˆ†ãšã‚‰ã—ã¦ã„ã‚‹
+const int BALL_OFFSET_X = 312;
+
+// å·¦ã®å£
+const int LEFT_WALL_X = 288;
+// å³ã®å£
+const int RIGHT_WALL_X = 672;
+const int PLAY_AREA_WIDTH = RIGHT_WALL_X - LEFT_WALL_X;
+
+// ãƒãƒ–ãƒ«ã®ç§»å‹•ã‚¹ãƒ”ãƒ¼ãƒ‰
 const double BUBBLE_SPEED = 8.0;
 
-// ƒ{[ƒ‹”z—ñ‚Ì—ñ
+// ãƒœãƒ¼ãƒ«é…åˆ—ã®åˆ—
 const int BALL_TABLE_COL = 8;
-// ƒ{[ƒ‹”z—ñ‚Ìs
+// ãƒœãƒ¼ãƒ«é…åˆ—ã®è¡Œ
 const int BALL_TABLE_ROW = 13;
-// ”¼Œa
-const int BALL_RADIUS = 16;
+// åŠå¾„
+const int BALL_RADIUS = 24;
 
-// ƒ{[ƒ‹‚ÌF”z—ñ
+// ãƒœãƒ¼ãƒ«ã®è‰²é…åˆ—
 int colArray[4] =
 {
-	0xFF0000,	//0: Ô
-	0x00FF00,	//1: —Î
-	0x0000FF,	//2: Â
-	0xFFFFFF,	//3: ”’
+	0xFF0000,	//0: èµ¤
+	0x00FF00,	//1: ç·‘
+	0x0000FF,	//2: é’
+	0xFFFFFF,	//3: ç™½
 };
 
-// •ûŒü
+// æ–¹å‘
 enum Direction {
 	TOP_LEFT = 0,	// 0
 	TOP_RIGHT,		// 1
@@ -44,58 +54,206 @@ enum BALL_STATE {
 	STOP
 };
 
-class Ball
+// ä¸€ç•ªè·é›¢ãŒå°ã•ã‹ã£ãŸãƒœãƒ¼ãƒ«ã®è¡Œã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
+int nearestBallRow = -1;
+// ä¸€ç•ªè·é›¢ãŒå°ã•ã‹ã£ãŸãƒœãƒ¼ãƒ«ã®åˆ—ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
+int nearestBallCol = -1;
+// ä¸€ç•ªè·é›¢ãŒå°ã•ã‹ã£ãŸå€¤ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
+float nearestDistance = 0;
+
+// ãƒ—ãƒ­ãƒˆã‚¿ã‚¤ãƒ—å®£è¨€
+int checkSameColorBall(int row, int col);
+void _checkSameColorBall(int row, int col, int& findNum, int color);
+Float2 GetBubblePos(int row, int col);
+
+class Cannon;
+class Ball;
+
+
+
+// ãƒœãƒ¼ãƒ«ã‚¯ãƒ©ã‚¹ã®é…åˆ—
+Ball* ballTable[BALL_TABLE_ROW][BALL_TABLE_COL];
+
+class Ball : public Task
 {
 public:
-	Ball()
+	Ball(int taskId) : Task(taskId)
 	{
 		pos.x = pos.y = 0.0f;
-		moveVec.x = moveVec.y = 0.0f;
-		state = WAIT;
+		
 		isCheck = false;
 		isSelect = false;
 		colorNum = 0;
-		colIdx = 0;
-		rowIdx = 0;
+		
 	}
-	Ball(Float2 SetPos)
+	Ball(int taskId, Float2 SetPos) : Task(taskId)
 	{
 		pos = SetPos;
+		isCheck = false;
+		isSelect = false;
+		colorNum = 0;
 	}
-	void update(float angle)
+	void update()
 	{
-		switch (state) {
-		case WAIT:
-			// ƒoƒuƒ‹‚Ì”­Ë
-			if (CheckHitKey(KEY_INPUT_SPACE)) {
-				moveVec.x = cos(angle) * BUBBLE_SPEED;
-				moveVec.y = -sin(angle) * BUBBLE_SPEED;
+		
+	}
+	void render()
+	{
 
-				state = MOVE;
-			}
-			break;
-		case MOVE:
-			pos.x += moveVec.x;
-			pos.y += moveVec.y;
-			break;
-		case STOP:
+	}
+	void eventProc(Event* pEvent)
+	{
 
-			break;
-		default:
+	}
 
-			break;
+	
+	Float2 pos;
+	bool isCheck;
+	bool isSelect;
+	int colorNum;
+
+};
+
+class ShotBall : public Task
+{
+public:
+	ShotBall(int taskId, Float2 startPos, float angle, int color) : Task(taskId)
+	{
+		pos = startPos;
+		colorNum = color;
+
+		moveVec.x = cos(angle) * BUBBLE_SPEED;
+		moveVec.y = sin(angle) * BUBBLE_SPEED;
+	}
+	void update()
+	{
+		// ç§»å‹•
+		pos.x += moveVec.x;
+		pos.y += moveVec.y;
+
+		// å·¦ã®å£ã«å½“ãŸã£ãŸå ´åˆ
+		if (pos.x < LEFT_WALL_X + BALL_RADIUS) {
+			// ã‚ã‚Šã“ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
+			pos.x = LEFT_WALL_X + BALL_RADIUS;
+			// Xã®ç§»å‹•æ–¹å‘ã‚’åè»¢
+			moveVec.x *= -1.0f;
+		}
+		// å³ã®å£ã«å½“ãŸã£ãŸå ´åˆ
+		else if (RIGHT_WALL_X - BALL_RADIUS < pos.x) {
+			// ã‚ã‚Šã“ã¾ãªã„ã‚ˆã†ã«ã™ã‚‹
+			pos.x = RIGHT_WALL_X - BALL_RADIUS;
+			// Xã®ç§»å‹•æ–¹å‘ã‚’åè»¢
+			moveVec.x *= -1.0f;
 
 		}
+
+		// ãƒœãƒ¼ãƒ«ã‹å¤©äº•ã¨ã®å½“ãŸã‚Šåˆ¤å®š
+		bool isHit = false;
+		// å¤©äº•ã«å½“ãŸã£ãŸã‹ã©ã†ã‹
+		if (pos.y < BALL_RADIUS) {
+			isHit = true;
+		}
+		// æ—¢å­˜ã®ãƒœãƒ¼ãƒ«ã¨ã®å½“ãŸã‚Šåˆ¤å®š
+		else {
+			// å…¨ã¦ã®å›ºå®šãƒœãƒ¼ãƒ«ã¨è¡çªåˆ¤å®š
+			for (int r = 0; r < BALL_TABLE_ROW; r++) {
+				for (int c = 0; c < BALL_TABLE_COL; c++) {
+					//	ã‚‚ã—é…åˆ—ã®ä¸­èº«ãŒnullptrãªã‚‰å¼¾ã
+					if (ballTable[r][c] == nullptr) continue;
+
+					// æ—¢å­˜ã®ãƒœãƒ¼ãƒ«ã®åº§æ¨™ã‚’å–å¾—
+					Float2 taragetPos = GetBubblePos(r, c);
+					// ä»Šã®shotBallã¨å½“ãŸã‚Šåˆ¤å®š
+					if (CheckCircleHit(pos.x, pos.y, BALL_RADIUS,
+						taragetPos.x, taragetPos.y, BALL_RADIUS))
+					{
+						// å½“ãŸã£ã¦ã„ãŸã‚‰
+						isHit = true;
+						break;
+					}
+
+				}
+			}
+		}
+
+		if (isHit == true) {
+			// è·é›¢ã®åˆæœŸåŒ–
+			nearestDistance = 10000.0f;
+			nearestBallRow = -1;
+			nearestBallCol = -1;
+
+			// å…¨ã¦ã®ç©ºããƒã‚¹ã®æ¢ç´¢
+			for (int r = 0; r < BALL_TABLE_ROW; r++) {
+				for (int c = 0; c < BALL_TABLE_COL; c++)
+				{
+					// ä¸­èº«ãŒã‚ã‚‹ãªã‚‰ã“ã“ã§ã¯ã˜ã
+					if (ballTable[r][c] != nullptr) continue;
+					// å¥‡æ•°è¡Œã®å³ç«¯ã¯å…¥ã‚Œãªã„ã®ã§å¼¾ã
+					if (r % 2 != 0 && BALL_TABLE_COL - 1 <= c) continue;
+
+					// ä»Šè¦‹ã¦ã„ã‚‹ãƒœãƒ¼ãƒ«ã®åº§æ¨™ã‚’å–ã‚‹
+					Float2 cellPos = GetBubblePos(r, c);
+					// è·é›¢ã®è¨ˆç®—
+					float distance = GetDistance(pos.x, pos.y, cellPos.x, cellPos.y);
+					//ä»Šä¿å­˜ã•ã‚Œã¦ã„ã‚‹å€¤ã‚ˆã‚Šã‚‚å°ã•ã„è·é›¢ã ã£ãŸã‚‰
+					if (distance < nearestDistance) {
+						nearestDistance = distance;
+						nearestBallCol = c;
+						nearestBallRow = r;
+					}
+				}
+			}
+
+			// ä¸€ç•ªè¿‘ã„ç©ºããƒã‚¹ãŒè¦‹ã¤ã‹ã£ãŸã‚‰ã€ãã“ã«å›ºå®šãƒœãƒ¼ãƒ«ã‚’ç”Ÿæˆ
+			if (nearestBallRow != -1 && nearestBallCol != -1) {
+				TaskManager* pTM = TaskManager::getInstance();
+				ballTable[nearestBallRow][nearestBallCol] = new Ball(pTM->generateId());
+				ballTable[nearestBallRow][nearestBallCol]->colorNum = this->colorNum;
+				pTM->add(ballTable[nearestBallRow][nearestBallCol]);
+
+				int findBallNum = 0;
+				// é¸æŠãƒœãƒ¼ãƒ«ã¨ã¤ãªãŒã£ã¦ã„ã‚‹åŒè‰²ã‚’ã™ã¹ã¦ isSelect = true ã«ã™ã‚‹
+				findBallNum = checkSameColorBall(nearestBallRow, nearestBallCol);
+				// ä¸‰ã¤ä»¥ä¸Šã¤ãªãŒã£ã¦ã„ã‚Œã°å‰Šé™¤
+				if (3 <= findBallNum) {
+					for (int row = 0; row < BALL_TABLE_ROW; row++) {
+						Ball** ppCurRow = ballTable[row];
+						for (int col = 0; col < BALL_TABLE_COL; col++) {
+							Ball* pBall = ppCurRow[col];
+							if (pBall == nullptr) continue;
+
+							if (ballTable[row][col]->isSelect == true) {
+								pTM->kill(ballTable[row][col]->getTaskId());
+								ballTable[row][col] = nullptr;
+							}
+						}
+					}
+
+				}
+			}
+
+			// è‡ªåˆ†ï¼ˆå¼¾ï¼‰ã‚’æ¶ˆã™
+			TaskManager::getInstance()->kill(getTaskId());
+		}
+
+		
+
+		// æ›´æ–°å‡¦ç†ã®çµ‚äº†
+	}
+	void render()
+	{
+		// è‰²ã‚’æç”»
+		int drawColor = colArray[colorNum - 1];
+		DrawCircle((int)pos.x, (int)pos.y, BALL_RADIUS, drawColor);
+	}
+	void eventProc(Event* pEvent)
+	{
+
 	}
 
 	Float2 pos;
 	Float2 moveVec;
-	int state;
-	bool isCheck;
-	bool isSelect;
 	int colorNum;
-	int colIdx;
-	int rowIdx;
 
 };
 
@@ -104,225 +262,297 @@ class Cannon
 public:
 	Cannon()
 	{
-		pos.x = WINDOW_WIDTH_HALF - 75;
-		pos.y = WINDOW_HEIGHT - 70;
-		angle = 3.14159265 / 2.0; // 90“x(^ã)
+		pos.x = WINDOW_WIDTH_HALF;
+		pos.y = WINDOW_HEIGHT - 60;
+		angle = 3.14159265 / 2.0; // 90åº¦(çœŸä¸Š)(-1.57f)
+		nextColor = GetRand(2) + 1;
 	}
 
 	void update()
 	{
-		// ¶‰EƒL[‚ÅŠp“x•ÏX
-		if (CheckHitKey(KEY_INPUT_LEFT))  angle += 0.05;
-		if (CheckHitKey(KEY_INPUT_RIGHT)) angle -= 0.05;
-		if (CheckHitKey(KEY_INPUT_UP)) angle = 3.14159265 / 2.0;
+		// å·¦å³ã‚­ãƒ¼ã§è§’åº¦å¤‰æ›´
+		if (CheckHitKey(KEY_INPUT_LEFT))  angle += 0.05f;
+		if (CheckHitKey(KEY_INPUT_RIGHT)) angle -= 0.05f;
+		if (CheckHitKey(KEY_INPUT_UP)) angle = 3.14159265f / 2.0f;
 
-		// Šp“x‚Ì§ŒÀ(^‰¡‚â‰º‚É‚ÍŒ‚‚Ä‚È‚¢‚æ‚¤‚É‚·‚é)
+		// è§’åº¦ã®åˆ¶é™(çœŸæ¨ªã‚„ä¸‹ã«ã¯æ’ƒã¦ãªã„ã‚ˆã†ã«ã™ã‚‹)
 		angle = min(max(0.2f, angle), 3.141592f - 0.2f);
 		
+		// ----------------------------------------
+		// SPACEã‚­ãƒ¼ã§ç™ºå°„ï¼
+		// ----------------------------------------
+		if (pushHitKey(KEY_INPUT_SPACE)) {
+			TaskManager* pTM = TaskManager::getInstance();
+
+			// æ–°ã—ã„ ShotBall ã‚’ç”Ÿæˆã—ã¦ã‚¿ã‚¹ã‚¯ãƒãƒãƒ¼ã‚¸ãƒ£ã«ç™»éŒ²
+			pTM->add(new ShotBall(pTM->generateId(), pos, angle * -1, nextColor));
+
+			// æ¬¡ã«è£…å¡«ã™ã‚‹è‰²ã‚’ãƒ©ãƒ³ãƒ€ãƒ ï¼ˆ1ã€œ4ï¼‰ã§æ±ºã‚ã‚‹
+			nextColor = GetRand(2) + 1;
+		}
 	}
 
 	void draw()
 	{
-		//DrawCircle(pos.x, pos.y, BALL_RADIUS, 0xFF00FF);
-		// ‘å–Ci”­Ë‚Ì‹O“¹üj‚ğ•`‰æ
-		DrawLine(pos.x, pos.y, pos.x + (int)(cos(angle) * 50), pos.y - (int)(sin(angle) * 50), GetColor(255, 255, 255), 4);
+		DrawCircle(pos.x, pos.y, BALL_RADIUS, colArray[nextColor - 1]);
+		// å¤§ç ²ï¼ˆç™ºå°„ã®è»Œé“ç·šï¼‰ã‚’æç”»
+		DrawLine(pos.x, pos.y, 
+			pos.x + (int)(cos(angle) * 50), 
+			pos.y - (int)(sin(angle) * 50), 
+			GetColor(255, 255, 255), 4);
 	}
 
 	Float2 pos;
 	float angle;
+	int nextColor; // è£…å¡«ã•ã‚Œã¦ã„ã‚‹ç‰ã®è‰²
 };
 
 
-
-// ˆê”Ô‹——£‚ª¬‚³‚©‚Á‚½ƒ{[ƒ‹‚Ìs‚ğ•Û‘¶‚·‚é•Ï”
-int nearestBallRow = -1;
-// ˆê”Ô‹——£‚ª¬‚³‚©‚Á‚½ƒ{[ƒ‹‚Ì—ñ‚ğ•Û‘¶‚·‚é•Ï”
-int nearestBallCol = -1;
-// ˆê”Ô‹——£‚ª¬‚³‚©‚Á‚½’l‚ğ•Û‘¶‚·‚é•Ï”
-float nearestDistance = 0;
-
-// ƒ{[ƒ‹ƒNƒ‰ƒX‚Ì”z—ñ
-Ball ballTable[BALL_TABLE_ROW][BALL_TABLE_COL];
-
-// ƒvƒƒgƒ^ƒCƒvéŒ¾
-void _checkSameColorBall(Ball& ball, int row, int col, int& findNum, int color);
-
-Ball curBall;
-Ball nextBall;
-
 Cannon cannon;
 
-// ’¼ÚŒÄ‚Ño‚³‚ê‚éÄ‹Nˆ—‚ğŠJn‚·‚éŠÖ”
-int checkSameColorBall(Ball& ball, int row, int col)
+
+// ç›´æ¥å‘¼ã³å‡ºã•ã‚Œã‚‹å†èµ·å‡¦ç†ã‚’é–‹å§‹ã™ã‚‹é–¢æ•°
+int checkSameColorBall(int _row, int _col)
 {
-	// ‘Sƒ{[ƒ‹‚Ìƒ`ƒFƒbƒN‚ğ‰ğœ
-	for (Ball(&row)[8] : ballTable) {
-		for (Ball& curBall : row) {
-			curBall.isCheck = false;
+	// å…¨ãƒœãƒ¼ãƒ«ã®ãƒã‚§ãƒƒã‚¯ã‚’è§£é™¤
+	for (int row = 0; row < BALL_TABLE_ROW; row++) {
+		Ball** ppCurRow = ballTable[row];
+		for (int col = 0; col < BALL_TABLE_COL; col++) {
+			Ball* pBall = ppCurRow[col];
+
+			if (pBall == nullptr) continue;
+
+			pBall->isCheck = false;
+			pBall->isSelect = false;
 		}
 	}
 
-	// Œ©‚Â‚©‚Á‚½”‚ğ•Û‘¶‚·‚é•Ï”
+	// è¦‹ã¤ã‹ã£ãŸæ•°ã‚’ä¿å­˜ã™ã‚‹å¤‰æ•°
 	int findNum = 0;
 
-	int colorBuffer = ballTable[row][col].colorNum;
+	int colorBuffer = ballTable[_row][_col]->colorNum;
 
-	// Ä‹Nˆ—‚Å’Tõ
-	_checkSameColorBall(ball, row, col, findNum, colorBuffer);
+	// å†èµ·å‡¦ç†ã§æ¢ç´¢
+	_checkSameColorBall(_row, _col, findNum, colorBuffer);
 
 
 	return findNum;
 }
 
 
-void _checkSameColorBall(Ball& ball, int row, int col, int& findNum, int color)
+void _checkSameColorBall(int _row, int _col, int& findNum, int color)
 {
-	// Œ»İQÆ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚és‚Ì”Ô†‚ª”z—ñ‚Ì”ÍˆÍ“à‚Éû‚Ü‚Á‚Ä‚¢‚é‚©‚ğƒ`ƒFƒbƒN
-	if (row < 0 || BALL_TABLE_ROW <= row) {
-		// ”z—ñŠO‚ğQÆ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é‚Ì‚Å‚±‚±‚ÅÄ‹Nˆ—‚ğI—¹
+	// ç¾åœ¨å‚ç…§ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹è¡Œã®ç•ªå·ãŒé…åˆ—ã®ç¯„å›²å†…ã«åã¾ã£ã¦ã„ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯
+	if (_row < 0 || BALL_TABLE_ROW <= _row) {
+		// é…åˆ—å¤–ã‚’å‚ç…§ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã®ã§ã“ã“ã§å†èµ·å‡¦ç†ã‚’çµ‚äº†
 		return;
 	}
-	// Œ»İQÆ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é—ñ‚Ì”Ô†‚ª”z—ñ‚Ì”ÍˆÍ“à‚Éû‚Ü‚Á‚Ä‚¢‚é‚©‚ğƒ`ƒFƒbƒN
-	if (col < 0 || BALL_TABLE_COL <= col) {
-		// ”z—ñŠO‚ğQÆ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é‚Ì‚Å‚±‚±‚ÅÄ‹Nˆ—‚ğI—¹
-		return;
-	}
-	// Œ»İQÆ‚µ‚æ‚¤‚Æ‚µ‚Ä‚¢‚é”Ô†‚Ì”z—ñ‚Ì—v‘f‚ªƒ`ƒFƒbƒNÏ‚İ‚©‚ğƒ`ƒFƒbƒN
-	if (ballTable[row][col].isCheck == true) {
-		// Šù‚Éƒ`ƒFƒbƒN(’Tõ)Ï‚İ‚È‚Ì‚Å‚±‚±‚ÅÄ‹Nˆ—‚ğI—¹
+	// ç¾åœ¨å‚ç…§ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹åˆ—ã®ç•ªå·ãŒé…åˆ—ã®ç¯„å›²å†…ã«åã¾ã£ã¦ã„ã‚‹ã‹ã‚’ãƒã‚§ãƒƒã‚¯
+	if (_col < 0 || BALL_TABLE_COL <= _col) {
+		// é…åˆ—å¤–ã‚’å‚ç…§ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ã®ã§ã“ã“ã§å†èµ·å‡¦ç†ã‚’çµ‚äº†
 		return;
 	}
 
-	ballTable[row][col].isCheck = true;
+	if (ballTable[_row][_col] == nullptr) return;
 
-	// w’è‚³‚ê‚½—v‘f‚ÌF‚ª“¯‚¶‚©ƒ`ƒFƒbƒN
-	if (ballTable[row][col].colorNum != color) {
-		// F‚ª“¯‚¶‚Å‚Í–³‚¢‚Ì‚Å‚±‚±‚ÅÄ‹Aˆ—‚ğI—¹
+	// ç¾åœ¨å‚ç…§ã—ã‚ˆã†ã¨ã—ã¦ã„ã‚‹ç•ªå·ã®é…åˆ—ã®è¦ç´ ãŒãƒã‚§ãƒƒã‚¯æ¸ˆã¿ã‹ã‚’ãƒã‚§ãƒƒã‚¯
+	if (ballTable[_row][_col]->isCheck == true) {
+		// æ—¢ã«ãƒã‚§ãƒƒã‚¯(æ¢ç´¢)æ¸ˆã¿ãªã®ã§ã“ã“ã§å†èµ·å‡¦ç†ã‚’çµ‚äº†
 		return;
 	}
 
-	// “¯‚¶F‚ğŒ©‚Â‚¯‚½”‚ğƒJƒEƒ“ƒg
+	ballTable[_row][_col]->isCheck = true;
+
+	// æŒ‡å®šã•ã‚ŒãŸè¦ç´ ã®è‰²ãŒåŒã˜ã‹ãƒã‚§ãƒƒã‚¯
+	if (ballTable[_row][_col]->colorNum != color) {
+		// è‰²ãŒåŒã˜ã§ã¯ç„¡ã„ã®ã§ã“ã“ã§å†å¸°å‡¦ç†ã‚’çµ‚äº†
+		return;
+	}
+
+	// åŒã˜è‰²ã‚’è¦‹ã¤ã‘ãŸæ•°ã‚’ã‚«ã‚¦ãƒ³ãƒˆ
 	findNum++;
-	// ‘ÎÛ‚Æ‚µ‚Ä
-	ballTable[row][col].isSelect = true;
+	// å¯¾è±¡ã¨ã—ã¦
+	ballTable[_row][_col]->isSelect = true;
 
-	// —×Ú6•ûŒü‚Ì’Tõ
+	// éš£æ¥6æ–¹å‘ã®æ¢ç´¢
 	// offsetX = (row % 2 == 0) ? BALL_RADIUS : BALL_RADIUS * 2.0f;
-	// ‚±‚Ì•`‰æ•û®‚É‡‚í‚¹‚Ä‹ô”s/Šï”s‚Å—×Ú‚ğ•ª‚¯‚é
+	// ã“ã®æç”»æ–¹å¼ã«åˆã‚ã›ã¦å¶æ•°è¡Œ/å¥‡æ•°è¡Œã§éš£æ¥ã‚’åˆ†ã‘ã‚‹
 	const int dr_even[6] = { -1, -1, 0, 0, 1, 1 };
-	const int dc_even[6] = { -1,  0, -1, 1, -1, 0 }; // ‹ô”s‚Ì—×Ú
+	const int dc_even[6] = { -1,  0, -1, 1, -1, 0 }; // å¶æ•°è¡Œã®éš£æ¥
 	const int dr_odd[6] = { -1, -1, 0, 0, 1, 1 };
-	const int dc_odd[6] = { 0,  1, -1, 1,  0, 1 }; // Šï”s‚Ì—×Ú
+	const int dc_odd[6] = { 0,  1, -1, 1,  0, 1 }; // å¥‡æ•°è¡Œã®éš£æ¥
 
-	const int* dr = (row % 2 == 0) ? dr_even : dr_odd;
-	const int* dc = (row % 2 == 0) ? dc_even : dc_odd;
+	const int* dr = (_row % 2 == 0) ? dr_even : dr_odd;
+	const int* dc = (_row % 2 == 0) ? dc_even : dc_odd;
 
 	for (int i = 0; i < 6; ++i) {
-		int nr = row + dr[i];
-		int nc = col + dc[i];
-		// Ä‹Nˆ—‚ğs‚¤
-		_checkSameColorBall(ballTable[row][col], nr, nc, findNum, color);
+		int nr = _row + dr[i];
+		int nc = _col + dc[i];
+		// å†èµ·å‡¦ç†ã‚’è¡Œã†
+		_checkSameColorBall(nr, nc, findNum, color);
 	}
 
 }
 
+// åº§æ¨™ã‚’æŒãŸã›ã¦ã„ãªã„ãŸã‚
+// è¡Œ(Row)ã¨åˆ—(Col)ã‹ã‚‰ã€ç”»é¢ä¸Šã®XYåº§æ¨™ã‚’è¨ˆç®—ã—ã¦ç¬¬ä¸‰å››å¼•æ•°ã«å…¥ã‚Œã¦ã‚„ã‚‹
+Float2 GetBubblePos(int row, int col)
+{
+	Float2 ret;
+	int offsetX = (row % 2 == 0) ? 0 : BALL_RADIUS;
+	ret.x = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
+	ret.y = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
+	return ret;
+}
 
 
 //--------------------------------------------------------------
-// ‰Šú‰»ˆ—
+// åˆæœŸåŒ–å‡¦ç†
 //--------------------------------------------------------------
 void Init()
 {
+	TaskManager* pTM = TaskManager::getInstance();
+
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball* pCurRow = ballTable[row];
+		Ball** pCurRow = ballTable[row];
 		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = &pCurRow[col];
+			Ball* pBall = pCurRow[col];
+
+			pBall = nullptr;
 		}
 	}
+	
+	pTM->add(ballTable[0][0] = new Ball(pTM->generateId()));
+	ballTable[0][0]->colorNum = 1;
+	pTM->add(ballTable[0][1] = new Ball(pTM->generateId()));
+	ballTable[0][1]->colorNum = 1;
+	pTM->add(ballTable[0][2] = new Ball(pTM->generateId()));
+	ballTable[0][2]->colorNum = 2;
+	pTM->add(ballTable[0][3] = new Ball(pTM->generateId()));
+	ballTable[0][3]->colorNum = 1;
+	pTM->add(ballTable[0][4] = new Ball(pTM->generateId()));
+	ballTable[0][4]->colorNum = 3;
+	pTM->add(ballTable[0][5] = new Ball(pTM->generateId()));
+	ballTable[0][5]->colorNum = 2;
+	pTM->add(ballTable[0][6] = new Ball(pTM->generateId()));
+	ballTable[0][6]->colorNum = 3;
+	pTM->add(ballTable[0][7] = new Ball(pTM->generateId()));
+	ballTable[0][7]->colorNum = 1;
+	
+	pTM->add(ballTable[1][0] = new Ball(pTM->generateId()));
+	ballTable[1][0]->colorNum = 1;
+	pTM->add(ballTable[1][1] = new Ball(pTM->generateId()));
+	ballTable[1][1]->colorNum = 2;
+	pTM->add(ballTable[1][2] = new Ball(pTM->generateId()));
+	ballTable[1][2]->colorNum = 3;
+	pTM->add(ballTable[1][3] = new Ball(pTM->generateId()));
+	ballTable[1][3]->colorNum = 3;
+	pTM->add(ballTable[1][4] = new Ball(pTM->generateId()));
+	ballTable[1][4]->colorNum = 2;
+	pTM->add(ballTable[1][5] = new Ball(pTM->generateId()));
+	ballTable[1][5]->colorNum = 2;
+	pTM->add(ballTable[1][6] = new Ball(pTM->generateId()));
+	ballTable[1][6]->colorNum = 1;
+				   
+	pTM->add(ballTable[2][0] = new Ball(pTM->generateId()));
+	ballTable[2][0]->colorNum = 3;
+	pTM->add(ballTable[2][1] = new Ball(pTM->generateId()));
+	ballTable[2][1]->colorNum = 2;
+	pTM->add(ballTable[2][2] = new Ball(pTM->generateId()));
+	ballTable[2][2]->colorNum = 3;
+	pTM->add(ballTable[2][3] = new Ball(pTM->generateId()));
+	ballTable[2][3]->colorNum = 1;
+	pTM->add(ballTable[2][4] = new Ball(pTM->generateId()));
+	ballTable[2][4]->colorNum = 2;
+	pTM->add(ballTable[2][5] = new Ball(pTM->generateId()));
+	ballTable[2][5]->colorNum = 2;
+	pTM->add(ballTable[2][6] = new Ball(pTM->generateId()));
+	ballTable[2][6]->colorNum = 3;
+	pTM->add(ballTable[2][7] = new Ball(pTM->generateId()));
+	ballTable[2][7]->colorNum = 1;
+				   
+	pTM->add(ballTable[3][0] = new Ball(pTM->generateId()));
+	ballTable[3][0]->colorNum = 2;
+	pTM->add(ballTable[3][1] = new Ball(pTM->generateId()));
+	ballTable[3][1]->colorNum = 1;
+	pTM->add(ballTable[3][2] = new Ball(pTM->generateId()));
+	ballTable[3][2]->colorNum = 1;
+	pTM->add(ballTable[3][3] = new Ball(pTM->generateId()));
+	ballTable[3][3]->colorNum = 2;
+	pTM->add(ballTable[3][4] = new Ball(pTM->generateId()));
+	ballTable[3][4]->colorNum = 3;
+	pTM->add(ballTable[3][5] = new Ball(pTM->generateId()));
+	ballTable[3][5]->colorNum = 3;
+	pTM->add(ballTable[3][6] = new Ball(pTM->generateId()));
+	ballTable[3][6]->colorNum = 2;
+				   
+	pTM->add(ballTable[4][0] = new Ball(pTM->generateId()));
+	ballTable[4][0]->colorNum = 3;
+	pTM->add(ballTable[4][1] = new Ball(pTM->generateId()));
+	ballTable[4][1]->colorNum = 1;
+	pTM->add(ballTable[4][2] = new Ball(pTM->generateId()));
+	ballTable[4][2]->colorNum = 2;
+	pTM->add(ballTable[4][3] = new Ball(pTM->generateId()));
+	ballTable[4][3]->colorNum = 2;
+	pTM->add(ballTable[4][4] = new Ball(pTM->generateId()));
+	ballTable[4][4]->colorNum = 3;
+	pTM->add(ballTable[4][5] = new Ball(pTM->generateId()));
+	ballTable[4][5]->colorNum = 3;
+	pTM->add(ballTable[4][6] = new Ball(pTM->generateId()));
+	ballTable[4][6]->colorNum = 1;
+	pTM->add(ballTable[4][7] = new Ball(pTM->generateId()));
+	ballTable[4][7]->colorNum = 3;
+				   
+	pTM->add(ballTable[5][3] = new Ball(pTM->generateId()));
+	ballTable[5][3]->colorNum = 2;
+				   
+	pTM->add(ballTable[6][3] = new Ball(pTM->generateId()));
+	ballTable[6][3]->colorNum = 1;
+				   
+	pTM->add(ballTable[7][2] = new Ball(pTM->generateId()));
+	ballTable[7][2]->colorNum = 3;
+				   
+	pTM->add(ballTable[8][3] = new Ball(pTM->generateId()));
+	ballTable[8][3]->colorNum = 2;
+				   
+	pTM->add(ballTable[9][2] = new Ball(pTM->generateId()));
+	ballTable[9][2]->colorNum = 2;
 
-	ballTable[0][0].colorNum = 1;
-	ballTable[0][1].colorNum = 1;
-	ballTable[0][2].colorNum = 2;
-	ballTable[0][3].colorNum = 1;
-	ballTable[0][4].colorNum = 3;
-	ballTable[0][5].colorNum = 2;
-	ballTable[0][6].colorNum = 3;
-	ballTable[0][7].colorNum = 1;
-
-	ballTable[1][0].colorNum = 1;
-	ballTable[1][1].colorNum = 2;
-	ballTable[1][2].colorNum = 3;
-	ballTable[1][3].colorNum = 3;
-	ballTable[1][4].colorNum = 2;
-	ballTable[1][5].colorNum = 2;
-	ballTable[1][6].colorNum = 1;
-
-	ballTable[2][0].colorNum = 3;
-	ballTable[2][1].colorNum = 2;
-	ballTable[2][2].colorNum = 3;
-	ballTable[2][3].colorNum = 1;
-	ballTable[2][4].colorNum = 2;
-	ballTable[2][5].colorNum = 2;
-	ballTable[2][6].colorNum = 3;
-	ballTable[2][7].colorNum = 1;
-
-	ballTable[3][0].colorNum = 2;
-	ballTable[3][1].colorNum = 1;
-	ballTable[3][2].colorNum = 1;
-	ballTable[3][3].colorNum = 2;
-	ballTable[3][4].colorNum = 3;
-	ballTable[3][5].colorNum = 3;
-	ballTable[3][6].colorNum = 2;
-
-	ballTable[4][0].colorNum = 3;
-	ballTable[4][1].colorNum = 1;
-	ballTable[4][2].colorNum = 2;
-	ballTable[4][3].colorNum = 2;
-	ballTable[4][4].colorNum = 3;
-	ballTable[4][5].colorNum = 3;
-	ballTable[4][6].colorNum = 1;
-	ballTable[4][7].colorNum = 3;
-
-	ballTable[5][3].colorNum = 2;
-
-	ballTable[6][3].colorNum = 1;
-
-	ballTable[7][2].colorNum = 3;
-
-	ballTable[8][3].colorNum = 2;
-
-	ballTable[9][2].colorNum = 2;
 
 }
 
 
 //--------------------------------------------------------------
-// XVˆ—
+// æ›´æ–°å‡¦ç†
 //--------------------------------------------------------------
 void Update()
 {
-	int x, y;
-	GetMousePoint(&x, &y);
-	float mouseX = (float)x;
-	float mouseY = (float)y;
+	TaskManager* pTM = TaskManager::getInstance();
+	pTM->updateAll();
+	
+	//int x, y;
+	//GetMousePoint(&x, &y);
+	//float mouseX = (float)x;
+	//float mouseY = (float)y;
 
-	// ‹——£‚Ì‰Šú‰»
-	nearestDistance = 10000.0f;
-	nearestBallRow = -1;
-	nearestBallCol = -1;
 
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball* pCurRow = ballTable[row];
+		Ball** ppCurRow = ballTable[row];
 		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = &pCurRow[col];
+			Ball* pBall = ppCurRow[col];
+
+			if (pBall == nullptr) continue;
+
 			pBall->isSelect = false;
 		}
 	}
 
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball* pCurRow = ballTable[row];
+		Ball** ppCurRow = ballTable[row];
 		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = &pCurRow[col];
+			Ball* pBall = ppCurRow[col];
+
+			if (pBall == nullptr) continue;
 
 			if (pBall->colorNum <= 0) {
 				continue;
@@ -333,44 +563,11 @@ void Update()
 			float posX = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
 			float posY = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
 
-			// ‰~‚Ì“–‚½‚è”»’è
-			if (CheckCircleHit(mouseX, mouseY, BALL_RADIUS, posX, posY, BALL_RADIUS)) {
-				// “ñ“_‚Ì‹——£‚ğ‘ª‚é
-				float distance = GetDistance(mouseX, mouseY, posX, posY);
-				// ¡•Û‘¶‚³‚ê‚Ä‚¢‚é’l‚æ‚è‚à¬‚³‚¢‹——£‚¾‚Á‚½‚ç
-				if (distance < nearestDistance) {
-					nearestDistance = distance;
-					nearestBallCol = col;
-					nearestBallRow = row;
-				}
-
-			}
+			
 		}
 	}
 
-	int findBallNum = 0;
-	if (nearestBallRow >= 0 && nearestBallCol >= 0) {
-		ballTable[nearestBallRow][nearestBallCol].isSelect = true;
-
-		// ‘I‘ğƒ{[ƒ‹‚Æ‚Â‚È‚ª‚Á‚Ä‚¢‚é“¯F‚ğ‚·‚×‚Ä isSelect = true ‚É‚·‚é
-		// checkSameColorBall ‚Ì‘æˆêˆø”‚Í Ball& ‚ğ—v‹‚·‚é‚Ì‚Å“n‚·i’†‚Å‚Íg‚í‚È‚¢j
-		findBallNum = checkSameColorBall(ballTable[nearestBallRow][nearestBallCol], nearestBallRow, nearestBallCol);
-	}
-
-	if (pushHitKey(KEY_INPUT_RETURN)) {
-		if (3 <= findBallNum)
-			for (int row = 0; row < BALL_TABLE_ROW; row++) {
-				Ball* pCurRow = ballTable[row];
-				for (int col = 0; col < BALL_TABLE_COL; col++) {
-					Ball* pBall = &pCurRow[col];
-
-					if (ballTable[row][col].isSelect == true) {
-						ballTable[row][col].colorNum = 0x000000;
-					}
-				}
-			}
-
-	}
+	
 
 
 	cannon.update();
@@ -378,27 +575,28 @@ void Update()
 
 
 //--------------------------------------------------------------
-// •`‰æˆ—
+// æç”»å‡¦ç†
 //--------------------------------------------------------------
 void Draw()
 {
+	TaskManager* pTM = TaskManager::getInstance();
+
 	int x, y;
 	GetMousePoint(&x, &y);
 	float mouseX = (float)x;
 	float mouseY = (float)y;
 
-	// ü‚Ì‚İ‚Ì‰~‚Åƒ}ƒX‚ğ•`‰æ‚·‚é
+	// ç·šã®ã¿ã®å††ã§ãƒã‚¹ã‚’æç”»ã™ã‚‹
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball* pCurRow = ballTable[row];
+		Ball** ppCurRow = ballTable[row];
 		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = &pCurRow[col];
+			Ball* pBall = ppCurRow[col];
 
-			int idx = pBall->colorNum - 1;
-			int offsetX = (row % 2 == 0) ? BALL_RADIUS : BALL_RADIUS * 2.0f;
+			int offsetX = (row % 2 == 0) ? 0 : BALL_RADIUS;
 			float posX = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
 			float posY = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
 
-			// Šï”—ñ‚ÍÅŒã‚Ìƒ}ƒX‚ğg—p‚µ‚È‚¢
+			// å¥‡æ•°åˆ—ã¯æœ€å¾Œã®ãƒã‚¹ã‚’ä½¿ç”¨ã—ãªã„
 			if (row % 2 != 0 && BALL_TABLE_COL - 1 <= col)
 			{
 				continue;
@@ -410,19 +608,20 @@ void Draw()
 
 	}
 
-	// ballTable‚É“ü‚Á‚Ä‚¢‚éƒ{[ƒ‹‚ğ•`‰æ
+	// ballTableã«å…¥ã£ã¦ã„ã‚‹ãƒœãƒ¼ãƒ«ã‚’æç”»
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball* pCurRow = ballTable[row];
+		Ball** ppCurRow = ballTable[row];
 		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = &pCurRow[col];
+			Ball* pBall = ppCurRow[col];
 
+			if (pBall == nullptr) continue;
 
 			if (pBall->colorNum <= 0) {
 				continue;
 			}
 
 			int idx = pBall->colorNum - 1;
-			int offsetX = (row % 2 == 0) ? BALL_RADIUS : BALL_RADIUS * 2.0f;
+			int offsetX = (row % 2 == 0) ? 0 : BALL_RADIUS;
 			float posX = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
 			float posY = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
 
@@ -440,33 +639,36 @@ void Draw()
 	
 
 	
-	// ƒXƒe[ƒW‚Ì•Ç‚Ìü
-	DrawLine(WINDOW_WIDTH * 0.5f - 200, 0, WINDOW_WIDTH * 0.5f - 200, WINDOW_HEIGHT, 0xFFFFFF);
-	DrawLine(WINDOW_WIDTH * 0.5f + 60, 0, WINDOW_WIDTH * 0.5f + 60, WINDOW_HEIGHT, 0xFFFFFF);
+	// ã‚¹ãƒ†ãƒ¼ã‚¸ã®å£ã®ç·š
+	DrawLine(LEFT_WALL_X, 0, LEFT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
+	DrawLine(RIGHT_WALL_X, 0, RIGHT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
 
 	cannon.draw();
+	pTM->renderAll();
 }
 
 
 
-// ‚»‚ê‚ªo—ˆ‚½‚çÄ‹A“I‚É’Tõ‚µ‚Ä‚¢‚­
+// ãã‚ŒãŒå‡ºæ¥ãŸã‚‰å†å¸°çš„ã«æ¢ç´¢ã—ã¦ã„ã
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32);
+	// å‚ç›´åŒæœŸã‚’æœ‰åŠ¹ã«ã™ã‚‹
+	SetWaitVSyncFlag(TRUE);
 	ChangeWindowMode(true);
 	if (DxLib_Init() == -1)
 	{
 		return -1;
 	}
-	// •`‰ææ‰æ–Ê‚ğ— ‰æ–Ê‚É‚·‚é
+	// æç”»å…ˆç”»é¢ã‚’è£ç”»é¢ã«ã™ã‚‹
 	SetDrawScreen(DX_SCREEN_BACK);
 
 
 	//---------------------------------------
-	// •Ï”‚Ìì¬‚â‰Šú‰»A‚»‚Ì‘¼‰Šúİ’è
-	// « ƒVƒXƒeƒ€‰Šú‰» «
+	// å¤‰æ•°ã®ä½œæˆã‚„åˆæœŸåŒ–ã€ãã®ä»–åˆæœŸè¨­å®š
+	// â†“ ã‚·ã‚¹ãƒ†ãƒ åˆæœŸåŒ– â†“
 	initKeyManager();
-	// ª ƒVƒXƒeƒ€‰Šú‰» ª
+	// â†‘ ã‚·ã‚¹ãƒ†ãƒ åˆæœŸåŒ– â†‘
 	//---------------------------------------
 	Init();
 
@@ -476,21 +678,21 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 		//---------------------------------------
-		// XV
-		// « ƒVƒXƒeƒ€XV «
+		// æ›´æ–°
+		// â†“ ã‚·ã‚¹ãƒ†ãƒ æ›´æ–° â†“
 		updateKeyState();
-		// ª ƒVƒXƒeƒ€XV ª
+		// â†‘ ã‚·ã‚¹ãƒ†ãƒ æ›´æ–° â†‘
 		//---------------------------------------
 		Update();
 
 
 
 		//---------------------------------------
-		// •`‰æ
-		// « ‰æ–ÊÁ‹ «
+		// æç”»
+		// â†“ ç”»é¢æ¶ˆå» â†“
 		clsDx();
 		ClearDrawScreen();
-		// ª ‰æ–ÊÁ‹ ª
+		// â†‘ ç”»é¢æ¶ˆå» â†‘
 		//---------------------------------------
 		Draw();
 
@@ -498,6 +700,14 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ScreenFlip();
 	}
 
+	for (int row = 0; row < BALL_TABLE_ROW; row++) {
+		Ball** pCurRow = ballTable[row];
+		for (int col = 0; col < BALL_TABLE_COL; col++) {
+			Ball* pBall = pCurRow[col];
+
+			pBall = nullptr;
+		}
+	}
 
 	DxLib_End();
 
