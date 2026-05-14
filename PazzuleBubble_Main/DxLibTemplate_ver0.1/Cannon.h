@@ -12,5 +12,6 @@ public:
 
 	Float2 pos;
 	float angle;
-	int nextColor; // 装填されている玉の色
+	int curColor;  // 現在装填されている玉の色
+	int nextColor; // 次に装填される玉の色
 };

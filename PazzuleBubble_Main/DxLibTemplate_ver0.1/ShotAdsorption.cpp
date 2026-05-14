@@ -510,12 +510,6 @@ void Update()
 	TaskManager* pTM = TaskManager::getInstance();
 	pTM->updateAll();
 	
-	//int x, y;
-	//GetMousePoint(&x, &y);
-	//float mouseX = (float)x;
-	//float mouseY = (float)y;
-
-
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
 		Ball** ppCurRow = ballTable[row];
 		for (int col = 0; col < BALL_TABLE_COL; col++) {

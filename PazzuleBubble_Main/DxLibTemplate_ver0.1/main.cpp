@@ -3,6 +3,7 @@
 #include "Cannon.h"
 #include "TaskManager.h"
 #include "variable.h"
+#include "function.h"
 #include "keyManager.h"
 
 #include "dxlib/DxLib.h"
@@ -27,100 +28,100 @@ void Init()
 	}
 
 	pTM->add(ballTable[0][0] = new Ball(pTM->generateId()));
-	ballTable[0][0]->colorNum = 1;
+	ballTable[0][0]->colorNum = 0;
 	pTM->add(ballTable[0][1] = new Ball(pTM->generateId()));
-	ballTable[0][1]->colorNum = 1;
+	ballTable[0][1]->colorNum = 0;
 	pTM->add(ballTable[0][2] = new Ball(pTM->generateId()));
-	ballTable[0][2]->colorNum = 2;
+	ballTable[0][2]->colorNum = 1;
 	pTM->add(ballTable[0][3] = new Ball(pTM->generateId()));
-	ballTable[0][3]->colorNum = 1;
+	ballTable[0][3]->colorNum = 0;
 	pTM->add(ballTable[0][4] = new Ball(pTM->generateId()));
-	ballTable[0][4]->colorNum = 3;
+	ballTable[0][4]->colorNum = 2;
 	pTM->add(ballTable[0][5] = new Ball(pTM->generateId()));
-	ballTable[0][5]->colorNum = 2;
+	ballTable[0][5]->colorNum = 1;
 	pTM->add(ballTable[0][6] = new Ball(pTM->generateId()));
-	ballTable[0][6]->colorNum = 3;
+	ballTable[0][6]->colorNum = 5;
 	pTM->add(ballTable[0][7] = new Ball(pTM->generateId()));
-	ballTable[0][7]->colorNum = 1;
+	ballTable[0][7]->colorNum = 0;
 
 	pTM->add(ballTable[1][0] = new Ball(pTM->generateId()));
-	ballTable[1][0]->colorNum = 1;
+	ballTable[1][0]->colorNum = 0;
 	pTM->add(ballTable[1][1] = new Ball(pTM->generateId()));
-	ballTable[1][1]->colorNum = 2;
+	ballTable[1][1]->colorNum = 1;
 	pTM->add(ballTable[1][2] = new Ball(pTM->generateId()));
-	ballTable[1][2]->colorNum = 3;
+	ballTable[1][2]->colorNum = 2;
 	pTM->add(ballTable[1][3] = new Ball(pTM->generateId()));
-	ballTable[1][3]->colorNum = 3;
+	ballTable[1][3]->colorNum = 2;
 	pTM->add(ballTable[1][4] = new Ball(pTM->generateId()));
-	ballTable[1][4]->colorNum = 2;
+	ballTable[1][4]->colorNum = 1;
 	pTM->add(ballTable[1][5] = new Ball(pTM->generateId()));
-	ballTable[1][5]->colorNum = 2;
+	ballTable[1][5]->colorNum = 1;
 	pTM->add(ballTable[1][6] = new Ball(pTM->generateId()));
-	ballTable[1][6]->colorNum = 1;
+	ballTable[1][6]->colorNum = 0;
 
 	pTM->add(ballTable[2][0] = new Ball(pTM->generateId()));
-	ballTable[2][0]->colorNum = 3;
+	ballTable[2][0]->colorNum = 2;
 	pTM->add(ballTable[2][1] = new Ball(pTM->generateId()));
-	ballTable[2][1]->colorNum = 2;
+	ballTable[2][1]->colorNum = 1;
 	pTM->add(ballTable[2][2] = new Ball(pTM->generateId()));
-	ballTable[2][2]->colorNum = 3;
+	ballTable[2][2]->colorNum = 2;
 	pTM->add(ballTable[2][3] = new Ball(pTM->generateId()));
-	ballTable[2][3]->colorNum = 1;
+	ballTable[2][3]->colorNum = 0;
 	pTM->add(ballTable[2][4] = new Ball(pTM->generateId()));
-	ballTable[2][4]->colorNum = 2;
+	ballTable[2][4]->colorNum = 1;
 	pTM->add(ballTable[2][5] = new Ball(pTM->generateId()));
-	ballTable[2][5]->colorNum = 2;
+	ballTable[2][5]->colorNum = 1;
 	pTM->add(ballTable[2][6] = new Ball(pTM->generateId()));
-	ballTable[2][6]->colorNum = 3;
+	ballTable[2][6]->colorNum = 2;
 	pTM->add(ballTable[2][7] = new Ball(pTM->generateId()));
-	ballTable[2][7]->colorNum = 1;
+	ballTable[2][7]->colorNum = 0;
 
 	pTM->add(ballTable[3][0] = new Ball(pTM->generateId()));
-	ballTable[3][0]->colorNum = 2;
+	ballTable[3][0]->colorNum = 1;
 	pTM->add(ballTable[3][1] = new Ball(pTM->generateId()));
-	ballTable[3][1]->colorNum = 1;
+	ballTable[3][1]->colorNum = 0;
 	pTM->add(ballTable[3][2] = new Ball(pTM->generateId()));
-	ballTable[3][2]->colorNum = 1;
+	ballTable[3][2]->colorNum = 0;
 	pTM->add(ballTable[3][3] = new Ball(pTM->generateId()));
-	ballTable[3][3]->colorNum = 2;
+	ballTable[3][3]->colorNum = 1;
 	pTM->add(ballTable[3][4] = new Ball(pTM->generateId()));
-	ballTable[3][4]->colorNum = 3;
+	ballTable[3][4]->colorNum = 2;
 	pTM->add(ballTable[3][5] = new Ball(pTM->generateId()));
-	ballTable[3][5]->colorNum = 3;
+	ballTable[3][5]->colorNum = 2;
 	pTM->add(ballTable[3][6] = new Ball(pTM->generateId()));
-	ballTable[3][6]->colorNum = 2;
+	ballTable[3][6]->colorNum = 1;
 
 	pTM->add(ballTable[4][0] = new Ball(pTM->generateId()));
-	ballTable[4][0]->colorNum = 3;
+	ballTable[4][0]->colorNum = 2;
 	pTM->add(ballTable[4][1] = new Ball(pTM->generateId()));
-	ballTable[4][1]->colorNum = 1;
+	ballTable[4][1]->colorNum = 0;
 	pTM->add(ballTable[4][2] = new Ball(pTM->generateId()));
-	ballTable[4][2]->colorNum = 2;
+	ballTable[4][2]->colorNum = 1;
 	pTM->add(ballTable[4][3] = new Ball(pTM->generateId()));
-	ballTable[4][3]->colorNum = 2;
+	ballTable[4][3]->colorNum = 1;
 	pTM->add(ballTable[4][4] = new Ball(pTM->generateId()));
-	ballTable[4][4]->colorNum = 3;
+	ballTable[4][4]->colorNum = 2;
 	pTM->add(ballTable[4][5] = new Ball(pTM->generateId()));
-	ballTable[4][5]->colorNum = 3;
+	ballTable[4][5]->colorNum = 2;
 	pTM->add(ballTable[4][6] = new Ball(pTM->generateId()));
-	ballTable[4][6]->colorNum = 1;
+	ballTable[4][6]->colorNum = 0;
 	pTM->add(ballTable[4][7] = new Ball(pTM->generateId()));
-	ballTable[4][7]->colorNum = 3;
+	ballTable[4][7]->colorNum = 2;
 
 	pTM->add(ballTable[5][3] = new Ball(pTM->generateId()));
-	ballTable[5][3]->colorNum = 2;
+	ballTable[5][3]->colorNum = 1;
 
 	pTM->add(ballTable[6][3] = new Ball(pTM->generateId()));
-	ballTable[6][3]->colorNum = 1;
+	ballTable[6][3]->colorNum = 0;
 
 	pTM->add(ballTable[7][2] = new Ball(pTM->generateId()));
-	ballTable[7][2]->colorNum = 3;
+	ballTable[7][2]->colorNum = 2;
 
 	pTM->add(ballTable[8][3] = new Ball(pTM->generateId()));
-	ballTable[8][3]->colorNum = 2;
+	ballTable[8][3]->colorNum = 1;
 
 	pTM->add(ballTable[9][2] = new Ball(pTM->generateId()));
-	ballTable[9][2]->colorNum = 2;
+	ballTable[9][2]->colorNum = 1;
 
 
 }
@@ -145,29 +146,6 @@ void Update()
 		}
 	}
 
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** ppCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = ppCurRow[col];
-
-			if (pBall == nullptr) continue;
-
-			if (pBall->colorNum <= 0) {
-				continue;
-			}
-
-			int idx = pBall->colorNum - 1;
-			int offsetX = (row % 2 == 0) ? BALL_RADIUS : BALL_RADIUS * 2.0f;
-			float posX = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
-			float posY = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
-
-
-		}
-	}
-
-
-
-
 	cannon.update();
 }
 
@@ -178,6 +156,7 @@ void Update()
 void Draw()
 {
 	TaskManager* pTM = TaskManager::getInstance();
+	DrawGraph(0, 0, bg, TRUE);
 
 	// 線のみの円でマスを描画する
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
@@ -185,9 +164,7 @@ void Draw()
 		for (int col = 0; col < BALL_TABLE_COL; col++) {
 			Ball* pBall = ppCurRow[col];
 
-			int offsetX = (row % 2 == 0) ? 0 : BALL_RADIUS;
-			float posX = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
-			float posY = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
+			Float2 pos = GetBubblePos(row, col);
 
 			// 奇数列は最後のマスを使用しない
 			if (row % 2 != 0 && BALL_TABLE_COL - 1 <= col)
@@ -195,7 +172,7 @@ void Draw()
 				continue;
 			}
 
-			DrawCircle(posX, posY, BALL_RADIUS, 0xFFFFFF, 0);
+			DrawCircle(pos.x, pos.y, BALL_RADIUS, 0xFFFFFF, 0);
 
 		}
 
@@ -209,32 +186,25 @@ void Draw()
 
 			if (pBall == nullptr) continue;
 
-			if (pBall->colorNum <= 0) {
+			if (pBall->colorNum <= -1) {
 				continue;
 			}
 
-			int idx = pBall->colorNum - 1;
-			int offsetX = (row % 2 == 0) ? 0 : BALL_RADIUS;
-			float posX = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
-			float posY = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
+			Float2 pos = GetBubblePos(row, col);
 
-			int drawColor = colArray[idx];
-			if (pBall->isSelect == true) {
-				drawColor = 0xFFFF00;
-			}
+			int drawColor = colArray[pBall->colorNum];
 
-			DrawCircle(posX, posY, BALL_RADIUS, drawColor);
+			DrawCircle(pos.x, pos.y, BALL_RADIUS, drawColor);
 
 		}
 	}
 
-
-
-
-
 	// ステージの壁の線
-	DrawLine(LEFT_WALL_X, 0, LEFT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
-	DrawLine(RIGHT_WALL_X, 0, RIGHT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
+	//DrawLine(LEFT_WALL_X, 0, LEFT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
+	//DrawLine(RIGHT_WALL_X, 0, RIGHT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
+	// 天井
+	DrawFillBox(LEFT_WALL_X, 0, RIGHT_WALL_X, ceilingOffsetY, 0x808080);
+	DrawLine(LEFT_WALL_X, ceilingOffsetY, RIGHT_WALL_X, ceilingOffsetY, 0xFFFFFFF, 3);
 
 	cannon.draw();
 	pTM->renderAll();
@@ -265,7 +235,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//---------------------------------------
 	Init();
 
-
+	bg = LoadGraph("stage1_3.png");
 
 
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -301,6 +271,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 			pBall = nullptr;
 		}
 	}
+
+	DeleteGraph(bg);
 
 	DxLib_End();
 

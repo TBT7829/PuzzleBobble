@@ -15,3 +15,9 @@ void _checkIsolatedBall(int row, int col, int& findNum);
 // 座標を持たせていないため
 // 行(Row)と列(Col)から、画面上のXY座標を計算して第三四引数に入れてやる
 Float2 GetBubblePos(int row, int col);
+
+int GetRandomExistColor();
+
+
+
+void ShiftCeilingDown();

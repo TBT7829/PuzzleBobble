@@ -6,6 +6,7 @@
 #include "Float2.h"
 #include "ShotBall.h"
 #include "variable.h"
+#include "function.h"
 
 #include "dxlib/DxLib.h"
 #include<cmath>
@@ -16,7 +17,8 @@ Cannon::Cannon()
 	pos.x = WINDOW_WIDTH_HALF;
 	pos.y = WINDOW_HEIGHT - 60;
 	angle = 3.14159265 / 2.0; // 90度(真上)(-1.57f)
-	nextColor = GetRand(2) + 1;
+	curColor = GetRand(BALL_COLOR_NUM);
+	nextColor = GetRand(BALL_COLOR_NUM);
 }
 
 void Cannon::update()
@@ -36,16 +38,27 @@ void Cannon::update()
 		TaskManager* pTM = TaskManager::getInstance();
 
 		// 新しい ShotBall を生成してタスクマネージャに登録
-		pTM->add(new ShotBall(pTM->generateId(), pos, angle * -1, nextColor));
+		pTM->add(new ShotBall(pTM->generateId(), pos, angle * -1, curColor));
 
-		// 次に装填する色をランダム（1〜4）で決める
-		nextColor = GetRand(2) + 1;
+		// nextColorをcurColorに入れる
+		curColor = nextColor;
+		// 次に装填する色を場に存在する色の中から決める
+		nextColor = GetRandomExistColor();
 	}
 }
 
 void Cannon::draw()
 {
-	DrawCircle(pos.x, pos.y, BALL_RADIUS, colArray[nextColor - 1]);
+	// 今のボール
+	DrawCircle(pos.x, pos.y, BALL_RADIUS, colArray[curColor]);
+
+	// 次のボール
+	int nextPosX = pos.x - 60;
+	int nextPosY = pos.y + 20;
+	DrawCircle(nextPosX, nextPosY, BALL_RADIUS, colArray[nextColor]);
+
+	DrawString(nextPosX - 20, nextPosY + 20, "NEXT", 0xFFFFFF);
+
 	// 大砲（発射の軌道線）を描画
 	DrawLine(pos.x, pos.y,
 		pos.x + (int)(cos(angle) * 50),

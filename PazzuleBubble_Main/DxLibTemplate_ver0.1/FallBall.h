@@ -6,7 +6,7 @@
 class FallBall : public Task
 {
 public:
-	FallBall(int taskId, float x, float y, float _wait);
+	FallBall(int taskId, float x, float y, float _wait, int _color);
 	virtual ~FallBall();
 
 	virtual void update();
@@ -21,5 +21,5 @@ public:
 	Float2 pos;
 	Float2 moveVec;
 	float wait;
-
+	int color;
 };

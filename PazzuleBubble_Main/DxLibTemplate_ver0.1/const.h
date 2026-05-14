@@ -36,8 +36,10 @@ const int PLAY_AREA_WIDTH = RIGHT_WALL_X - LEFT_WALL_X;
 
 // 半径
 const int BALL_RADIUS = 24;
-// 壁からボールの半径分ずらしている
+// 壁からボールをずらしている
 const int BALL_OFFSET_X = 312;
+// 天井からボールをずらしている
+const int BALL_OFFSET_Y = 70;
 // バブルの移動スピード
 const double BUBBLE_SPEED = 8.0;
 // ボール配列の列
@@ -65,6 +67,8 @@ const int dirOdd[DIR_MAX][2] = {
 	{ -1, 0 },	// 左上
 	{-1, 1},	// 右上
 };
+
+const int BALL_COLOR_NUM = 8;
 
 
 #endif

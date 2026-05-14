@@ -3,6 +3,8 @@
 #include "variable.h"
 #include "const.h"
 
+#include "dxlib/DxLib.h"
+
 // 直接呼び出される再起処理を開始する関数
 int checkSameColorBall(int _row, int _col)
 {
@@ -167,8 +169,62 @@ void _checkIsolatedBall(int row, int col, int& findNum)
 Float2 GetBubblePos(int row, int col)
 {
 	Float2 ret;
+	// 奇数なら半径分さらにずらす
 	int offsetX = (row % 2 == 0) ? 0 : BALL_RADIUS;
+
+	// X座標を求める
 	ret.x = BALL_OFFSET_X + offsetX + col * BALL_RADIUS * 2.0f;
-	ret.y = BALL_RADIUS + row * BALL_RADIUS * 2.0f;
+	// Y座標を求める(天井のずれも加算する)
+	ret.y = BALL_OFFSET_Y + BALL_RADIUS + row * BALL_RADIUS * 2.0f + ceilingOffsetY;
+
 	return ret;
+}
+
+int GetRandomExistColor()
+{
+	// 存在する色を溜めるバッファ
+	int colorBuffer[BALL_COLOR_NUM]; 
+	// 今バッファに何種類入っているか
+	int bufferCount = 0;             
+
+	// 盤面を探索
+	for (int r = 0; r < BALL_TABLE_ROW; r++) {
+		for (int c = 0; c < BALL_TABLE_COL; c++) {
+
+			if (ballTable[r][c] == nullptr) continue;
+
+			
+			int targetColor = ballTable[r][c]->colorNum;
+
+			// 2. バッファに同じ色番号が既に入っているかチェック
+			bool isExits = false;
+			for (int i = 0; i < bufferCount; i++) {
+				if (colorBuffer[i] == targetColor) {
+					isExits = true;
+					break;
+				}
+			}
+
+			// 3. まだ入っていなければバッファに追加
+			if (isExits == false) {
+				colorBuffer[bufferCount] = targetColor;
+				bufferCount++;
+			}
+			
+		}
+	}
+
+	// 4. 全消し等でバッファが空なら全色からランダム
+	if (bufferCount == 0) {
+		return GetRand(BALL_COLOR_NUM - 1) + 1;
+	}
+
+	// 5. バッファの中からランダムに選出
+	return colorBuffer[GetRand(bufferCount - 1)];
+}
+
+void ShiftCeilingDown()
+{
+	// 天井をボール一行分ずらす
+	ceilingOffsetY += BALL_RADIUS * 2.0f;
 }

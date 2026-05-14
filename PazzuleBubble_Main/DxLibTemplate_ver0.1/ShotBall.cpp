@@ -46,7 +46,7 @@ void ShotBall::update()
 	// ボールか天井との当たり判定
 	bool isHit = false;
 	// 天井に当たったかどうか
-	if (pos.y < BALL_RADIUS) {
+	if (pos.y < BALL_OFFSET_Y + ceilingOffsetY + BALL_RADIUS) {
 		isHit = true;
 	}
 	// 既存のボールとの当たり判定
@@ -152,10 +152,11 @@ void ShotBall::update()
 				
 								Float2 setPos = GetBubblePos(row, col);
 								// FallBallを生成
-								pTM->add(new FallBall(pTM->generateId(), setPos.x, setPos.y, wait));
+								pTM->add(new FallBall(pTM->generateId(), setPos.x, setPos.y, wait, pBall->colorNum));
 								// Ballを消す
 								pTM->kill(ballTable[row][col]->getTaskId());
 								ballTable[row][col] = nullptr;
+								
 
 							}
 						}
@@ -176,6 +177,6 @@ void ShotBall::update()
 void ShotBall::render()
 {
 	// 色を描画
-	int drawColor = colArray[colorNum - 1];
+	int drawColor = colArray[colorNum];
 	DrawCircle((int)pos.x, (int)pos.y, BALL_RADIUS, drawColor);
 }
