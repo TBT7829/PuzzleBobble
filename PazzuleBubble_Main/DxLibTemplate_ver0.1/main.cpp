@@ -5,229 +5,25 @@
 #include "variable.h"
 #include "function.h"
 #include "keyManager.h"
+#include "SceneManager.h"
+#include "ImageManager.h"
+#include "sound.h"
 
 #include "dxlib/DxLib.h"
 #include <cmath>
 
-Cannon cannon;
 
-//--------------------------------------------------------------
-// 初期化処理
-//--------------------------------------------------------------
-void Init()
-{
-	TaskManager* pTM = TaskManager::getInstance();
-
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** pCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = pCurRow[col];
-
-			pBall = nullptr;
-		}
-	}
-
-	pTM->add(ballTable[0][0] = new Ball(pTM->generateId()));
-	ballTable[0][0]->colorNum = 0;
-	pTM->add(ballTable[0][1] = new Ball(pTM->generateId()));
-	ballTable[0][1]->colorNum = 0;
-	pTM->add(ballTable[0][2] = new Ball(pTM->generateId()));
-	ballTable[0][2]->colorNum = 1;
-	pTM->add(ballTable[0][3] = new Ball(pTM->generateId()));
-	ballTable[0][3]->colorNum = 0;
-	pTM->add(ballTable[0][4] = new Ball(pTM->generateId()));
-	ballTable[0][4]->colorNum = 2;
-	pTM->add(ballTable[0][5] = new Ball(pTM->generateId()));
-	ballTable[0][5]->colorNum = 1;
-	pTM->add(ballTable[0][6] = new Ball(pTM->generateId()));
-	ballTable[0][6]->colorNum = 5;
-	pTM->add(ballTable[0][7] = new Ball(pTM->generateId()));
-	ballTable[0][7]->colorNum = 0;
-
-	pTM->add(ballTable[1][0] = new Ball(pTM->generateId()));
-	ballTable[1][0]->colorNum = 0;
-	pTM->add(ballTable[1][1] = new Ball(pTM->generateId()));
-	ballTable[1][1]->colorNum = 1;
-	pTM->add(ballTable[1][2] = new Ball(pTM->generateId()));
-	ballTable[1][2]->colorNum = 2;
-	pTM->add(ballTable[1][3] = new Ball(pTM->generateId()));
-	ballTable[1][3]->colorNum = 2;
-	pTM->add(ballTable[1][4] = new Ball(pTM->generateId()));
-	ballTable[1][4]->colorNum = 1;
-	pTM->add(ballTable[1][5] = new Ball(pTM->generateId()));
-	ballTable[1][5]->colorNum = 1;
-	pTM->add(ballTable[1][6] = new Ball(pTM->generateId()));
-	ballTable[1][6]->colorNum = 0;
-
-	pTM->add(ballTable[2][0] = new Ball(pTM->generateId()));
-	ballTable[2][0]->colorNum = 2;
-	pTM->add(ballTable[2][1] = new Ball(pTM->generateId()));
-	ballTable[2][1]->colorNum = 1;
-	pTM->add(ballTable[2][2] = new Ball(pTM->generateId()));
-	ballTable[2][2]->colorNum = 2;
-	pTM->add(ballTable[2][3] = new Ball(pTM->generateId()));
-	ballTable[2][3]->colorNum = 0;
-	pTM->add(ballTable[2][4] = new Ball(pTM->generateId()));
-	ballTable[2][4]->colorNum = 1;
-	pTM->add(ballTable[2][5] = new Ball(pTM->generateId()));
-	ballTable[2][5]->colorNum = 1;
-	pTM->add(ballTable[2][6] = new Ball(pTM->generateId()));
-	ballTable[2][6]->colorNum = 2;
-	pTM->add(ballTable[2][7] = new Ball(pTM->generateId()));
-	ballTable[2][7]->colorNum = 0;
-
-	pTM->add(ballTable[3][0] = new Ball(pTM->generateId()));
-	ballTable[3][0]->colorNum = 1;
-	pTM->add(ballTable[3][1] = new Ball(pTM->generateId()));
-	ballTable[3][1]->colorNum = 0;
-	pTM->add(ballTable[3][2] = new Ball(pTM->generateId()));
-	ballTable[3][2]->colorNum = 0;
-	pTM->add(ballTable[3][3] = new Ball(pTM->generateId()));
-	ballTable[3][3]->colorNum = 1;
-	pTM->add(ballTable[3][4] = new Ball(pTM->generateId()));
-	ballTable[3][4]->colorNum = 2;
-	pTM->add(ballTable[3][5] = new Ball(pTM->generateId()));
-	ballTable[3][5]->colorNum = 2;
-	pTM->add(ballTable[3][6] = new Ball(pTM->generateId()));
-	ballTable[3][6]->colorNum = 1;
-
-	pTM->add(ballTable[4][0] = new Ball(pTM->generateId()));
-	ballTable[4][0]->colorNum = 2;
-	pTM->add(ballTable[4][1] = new Ball(pTM->generateId()));
-	ballTable[4][1]->colorNum = 0;
-	pTM->add(ballTable[4][2] = new Ball(pTM->generateId()));
-	ballTable[4][2]->colorNum = 1;
-	pTM->add(ballTable[4][3] = new Ball(pTM->generateId()));
-	ballTable[4][3]->colorNum = 1;
-	pTM->add(ballTable[4][4] = new Ball(pTM->generateId()));
-	ballTable[4][4]->colorNum = 2;
-	pTM->add(ballTable[4][5] = new Ball(pTM->generateId()));
-	ballTable[4][5]->colorNum = 2;
-	pTM->add(ballTable[4][6] = new Ball(pTM->generateId()));
-	ballTable[4][6]->colorNum = 0;
-	pTM->add(ballTable[4][7] = new Ball(pTM->generateId()));
-	ballTable[4][7]->colorNum = 2;
-
-	pTM->add(ballTable[5][3] = new Ball(pTM->generateId()));
-	ballTable[5][3]->colorNum = 1;
-
-	pTM->add(ballTable[6][3] = new Ball(pTM->generateId()));
-	ballTable[6][3]->colorNum = 0;
-
-	pTM->add(ballTable[7][2] = new Ball(pTM->generateId()));
-	ballTable[7][2]->colorNum = 2;
-
-	pTM->add(ballTable[8][3] = new Ball(pTM->generateId()));
-	ballTable[8][3]->colorNum = 1;
-
-	pTM->add(ballTable[9][2] = new Ball(pTM->generateId()));
-	ballTable[9][2]->colorNum = 1;
-
-
-}
-
-
-//--------------------------------------------------------------
-// 更新処理
-//--------------------------------------------------------------
-void Update()
-{
-	TaskManager* pTM = TaskManager::getInstance();
-	pTM->updateAll();
-
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** ppCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = ppCurRow[col];
-
-			if (pBall == nullptr) continue;
-
-			pBall->isSelect = false;
-		}
-	}
-
-
-	CheckGameOver();
-
-	cannon.update();
-}
-
-
-//--------------------------------------------------------------
-// 描画処理
-//--------------------------------------------------------------
-void Draw()
-{
-	TaskManager* pTM = TaskManager::getInstance();
-	DrawGraph(0, 0, bg, TRUE);
-
-	// 線のみの円でマスを描画する
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** ppCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = ppCurRow[col];
-
-			Float2 pos = GetBubblePos(row, col);
-
-			// 奇数列は最後のマスを使用しない
-			if (row % 2 != 0 && BALL_TABLE_COL - 1 <= col)
-			{
-				continue;
-			}
-
-			DrawCircle(pos.x, pos.y, BALL_RADIUS, 0xFFFFFF, 0);
-
-		}
-
-	}
-
-	// ballTableに入っているボールを描画
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** ppCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = ppCurRow[col];
-
-			if (pBall == nullptr) continue;
-
-			if (pBall->colorNum <= -1) {
-				continue;
-			}
-
-			Float2 pos = GetBubblePos(row, col);
-
-			int drawColor = colArray[pBall->colorNum];
-
-			DrawCircle(pos.x, pos.y, BALL_RADIUS, drawColor);
-
-		}
-	}
-
-	// ステージの壁の線
-	//DrawLine(LEFT_WALL_X, 0, LEFT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
-	//DrawLine(RIGHT_WALL_X, 0, RIGHT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);
-	// 天井
-	DrawFillBox(LEFT_WALL_X, 0, RIGHT_WALL_X, ceilingOffsetY, 0x808080);
-	DrawLine(LEFT_WALL_X, ceilingOffsetY, RIGHT_WALL_X, ceilingOffsetY, 0xFFFFFFF, 3);
-
-	// ゲームオーバー線
-	if (CheckGameOver() == false) {
-		DrawLine(LEFT_WALL_X, DEAD_LINE_Y, RIGHT_WALL_X, DEAD_LINE_Y, 0xFFFF00);
-	}
-	else {
-		DrawLine(LEFT_WALL_X, DEAD_LINE_Y, RIGHT_WALL_X, DEAD_LINE_Y, 0xFF0000);
-	}
-	
-
-
-	cannon.draw();
-	pTM->renderAll();
-}
 
 
 
 // それが出来たら再帰的に探索していく
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
+	// シーンマネージャーのシングルトンでインスタンスを取得
+	SceneManager* pSceneManager = SceneManager::getInstance();
+
+	SoundManager* pSM = SoundManager::getInstance();
+
 	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 32);
 	// 垂直同期を有効にする
 	SetWaitVSyncFlag(TRUE);
@@ -246,10 +42,112 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	initKeyManager();
 	// ↑ システム初期化 ↑
 	//---------------------------------------
-	Init();
+	ImageManager* pImageManager = ImageManager::getInstance();
 
-	bg = LoadGraph("stage1_3.png");
+	// BG(背景)
+	pImageManager->setImageInfo(ImageManager::IMAGE_BG, "stage1_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_LEFT_IDLE, "player_left_idle.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_LEFT_WIN, "player_left_win.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_LEFT_RELOAD, "player_left_reload.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_LEFT_FAILED, "player_left_failed.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_LEFT_OVER, "player_left_over.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_LEFT_SHOOT, "player_left_shoot.png");
 
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_RIGHT_IDLE, "player_right_idle.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_RIGHT_WIN, "player_right_win.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_RIGHT_CRANK, "player_right_crank.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PLAYER_RIGHT_OVER, "player_right_over.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BG, "stage1_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_GROUND, "scaffold1_3.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_NUMBER, "number.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BANDLE_1, "bandle_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BANDLE_2, "bandle_2.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_1, "launch_pad_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_2, "launch_pad_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_3, "launch_pad_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_4, "launch_pad_4.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_5, "launch_pad_5.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_6, "launch_pad_6.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_7, "launch_pad_7.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_8, "launch_pad_8.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_9, "launch_pad_9.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_10, "launch_pad_10.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_11, "launch_pad_11.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_LAUNCH_PAD_12, "launch_pad_12.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_CRANK, "crank.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_PIPE, "pipe.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_ARROW, "arrow_1.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_BLUE, "bubble_blue.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_BLUE_BURST_1, "bubble_blue_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_BLUE_BURST_2, "bubble_blue_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_BLUE_BURST_3, "bubble_blue_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_BLUE_BANISH, "bubble_blue_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_BLUE_ENEMY, "bubble_blue_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_RED, "bubble_red.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_RED_BURST_1, "bubble_red_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_RED_BURST_2, "bubble_red_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_RED_BURST_3, "bubble_red_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_RED_BANISH, "bubble_red_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_RED_ENEMY, "bubble_red_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_PURPLE, "bubble_purple.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_PURPLE_BURST_1, "bubble_purple_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_PURPLE_BURST_2, "bubble_purple_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_PURPLE_BURST_3, "bubble_purple_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_PURPLE_BANISH, "bubble_purple_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_PURPLE_ENEMY, "bubble_purple_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GRAY, "bubble_gray.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GRAY_BURST_1, "bubble_gray_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GRAY_BURST_2, "bubble_gray_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GRAY_BURST_3, "bubble_gray_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GRAY_BANISH, "bubble_gray_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GRAY_ENEMY, "bubble_gray_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_YELLOW, "bubble_yellow.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_YELLOW_BURST_1, "bubble_yellow_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_YELLOW_BURST_2, "bubble_yellow_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_YELLOW_BURST_3, "bubble_yellow_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_YELLOW_BANISH, "bubble_yellow_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_YELLOW_ENEMY, "bubble_yellow_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GREEN, "bubble_green.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GREEN_BURST_1, "bubble_green_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GREEN_BURST_2, "bubble_green_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GREEN_BURST_3, "bubble_green_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GREEN_BANISH, "bubble_green_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_GREEN_ENEMY, "bubble_green_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_ORANGE, "bubble_orange.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_ORANGE_BURST_1, "bubble_orange_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_ORANGE_BURST_2, "bubble_orange_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_ORANGE_BURST_3, "bubble_orange_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_ORANGE_BANISH, "bubble_orange_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_ORANGE_ENEMY, "bubble_orange_enemy.png");
+
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE, "bubble_white.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE_BURST_1, "bubble_white_burst_1.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE_BURST_2, "bubble_white_burst_2.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE_BURST_3, "bubble_white_burst_3.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE_BANISH, "bubble_white_banish.png");
+	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE_ENEMY, "bubble_white_enemy.png");
+
+	pImageManager->loadImageAll();
+
+	pSM->setSoundInfo(SoundManager::SOUND_STAGE, "PB_PLAY_BGM.m4a");
+	pSM->setSoundInfo(SoundManager::SOUND_SHOT, "SE_SHOT.m4a");
+	pSM->setSoundInfo(SoundManager::SOUND_FALL, "SE_FALLBALL.m4a");
+	pSM->setSoundInfo(SoundManager::SOUND_BURST , "SE_BURST.m4a");
+	pSM->setSoundInfo(SoundManager::SOUND_ADSORPTION, "SE_ADSORPTION.m4a");
+
+	pSM->loadSoundAll();
 
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
@@ -259,7 +157,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		updateKeyState();
 		// ↑ システム更新 ↑
 		//---------------------------------------
-		Update();
+		SoundManager::getInstance()->setSoundVolume(100);
+		PlaySoundMem(SoundManager::getInstance()->getSoundHandle(SoundManager::SOUND_STAGE), DX_PLAYTYPE_LOOP, FALSE);
+		// シーンマネージャーの更新関数
+		pSceneManager->update();
 
 
 
@@ -270,22 +171,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		ClearDrawScreen();
 		// ↑ 画面消去 ↑
 		//---------------------------------------
-		Draw();
+		// シーンマネージャーの描画関数
+		pSceneManager->render();
 
 
 		ScreenFlip();
 	}
 
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** pCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = pCurRow[col];
-
-			pBall = nullptr;
-		}
-	}
-
-	DeleteGraph(bg);
+	
+	// 画像の解除
+	ImageManager::getInstance()->clearImageManager();
+	pSM->clearSoundManager();
 
 	DxLib_End();
 

@@ -1,5 +1,4 @@
-#ifndef __KEY_MANAGER_H__
-#define __KEY_MANAGER_H__
+#pragma once
 
 // キーマネージャの初期化
 void initKeyManager();
@@ -28,5 +27,3 @@ const char* getStrKeyState();
 // 戻り値:
 //		全てのキーの押下瞬間状態を示す文字列
 const char* getStrKeyStateTrigger();
-
-#endif

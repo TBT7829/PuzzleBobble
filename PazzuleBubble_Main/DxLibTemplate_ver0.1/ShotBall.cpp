@@ -8,6 +8,8 @@
 #include "hitFunc.h"
 #include "Ball.h"
 #include "FallBall.h"
+#include "ImageManager.h"
+#include "sound.h"
 
 #include "dxlib/DxLib.h"
 #include<cmath>
@@ -15,10 +17,12 @@
 ShotBall::ShotBall(int taskId, Float2 startPos, float angle, int color) : Task(taskId)
 {
 	pos = startPos;
-	colorNum = color;
-
+	
 	moveVec.x = cos(angle) * BUBBLE_SPEED;
 	moveVec.y = sin(angle) * BUBBLE_SPEED;
+
+	colorNum = color;
+
 }
 
 void ShotBall::update()
@@ -103,8 +107,7 @@ void ShotBall::update()
 		// 一番近い空きマスが見つかったら、そこに固定ボールを生成
 		if (nearestBallRow != -1 && nearestBallCol != -1) {
 			TaskManager* pTM = TaskManager::getInstance();
-			ballTable[nearestBallRow][nearestBallCol] = new Ball(pTM->generateId());
-			ballTable[nearestBallRow][nearestBallCol]->colorNum = this->colorNum;
+			ballTable[nearestBallRow][nearestBallCol] = new Ball(pTM->generateId(), this->colorNum);
 			pTM->add(ballTable[nearestBallRow][nearestBallCol]);
 
 			int findBallNum = 0;
@@ -124,13 +127,15 @@ void ShotBall::update()
 						}
 					}
 				}
-
+				score += findBallNum * 10;
+				PlaySoundMem(SoundManager::getInstance()->getSoundHandle(SoundManager::SOUND_FALL), DX_PLAYTYPE_BACK, TRUE);
 
 				// if文を通ったということはボールの削除が行われているので
 				// 0行目の各ボールから探索をかけて孤立しているボールがいるかどうかを探す
 				checkIsolatedBall();
 
 				{
+					int isCount = 0;
 					//	何番目に落ちるかを保存する変数
 					float orderNum = 0.0f;
 					// パズルボブルAc版では下の行、右側優先の順番でボールが落ちていくので右下からforループを回す
@@ -145,6 +150,8 @@ void ShotBall::update()
 							if (pBall->isCheck == false) {
 								// 探索されていないボールが見つかったため、
 								// FallBallを生成しながら落とす
+								isCount++;
+
 								orderNum += 1.0f;
 
 								// 落ちるまでの待ち時間
@@ -161,10 +168,18 @@ void ShotBall::update()
 							}
 						}
 					}
+					if (isCount != 0) {
+						score += 10 * (1 << isCount);
+						PlaySoundMem(SoundManager::getInstance()->getSoundHandle(SoundManager::SOUND_FALL), DX_PLAYTYPE_BACK, TRUE);
+					}
+					
 				}
 			}
+
+			PlaySoundMem(SoundManager::getInstance()->getSoundHandle(SoundManager::SOUND_ADSORPTION), DX_PLAYTYPE_BACK, TRUE);
 		}
 
+		//ShiftCeilingDown();
 		// 自分（弾）を消す
 		TaskManager::getInstance()->kill(getTaskId());
 	}

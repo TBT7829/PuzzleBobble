@@ -8,6 +8,8 @@
 #include "variable.h"
 #include "function.h"
 
+#include "sound.h"
+
 #include "dxlib/DxLib.h"
 #include<cmath>
 
@@ -17,8 +19,8 @@ Cannon::Cannon()
 	pos.x = WINDOW_WIDTH_HALF;
 	pos.y = WINDOW_HEIGHT - 60;
 	angle = 3.14159265 / 2.0; // 90度(真上)(-1.57f)
-	curColor = GetRand(BALL_COLOR_NUM);
-	nextColor = GetRand(BALL_COLOR_NUM);
+	curColor = GetRandomExistColor();
+	nextColor = GetRandomExistColor();
 }
 
 void Cannon::update()
@@ -36,6 +38,8 @@ void Cannon::update()
 	// ----------------------------------------
 	if (pushHitKey(KEY_INPUT_SPACE)) {
 		TaskManager* pTM = TaskManager::getInstance();
+
+		PlaySoundMem(SoundManager::getInstance()->getSoundHandle(SoundManager::SOUND_SHOT), DX_PLAYTYPE_BACK, TRUE);
 
 		// 新しい ShotBall を生成してタスクマネージャに登録
 		pTM->add(new ShotBall(pTM->generateId(), pos, angle * -1, curColor));

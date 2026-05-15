@@ -1,102 +1,183 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="ヘッダー ファイル">
-      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
-      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
-    </Filter>
     <Filter Include="リソース ファイル">
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Scenes">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Objects">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Main">
+      <UniqueIdentifier>{73c43dd5-930c-418f-9bff-1cd7902275ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System">
+      <UniqueIdentifier>{deccee0d-0f62-46f0-a497-6392c1b2a639}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Bubble">
+      <UniqueIdentifier>{7d7829b6-43c8-4815-8890-582dccd8fe1a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Objects\Cannon">
+      <UniqueIdentifier>{4ab47299-8317-4b57-8a11-0d1c180384dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Function">
+      <UniqueIdentifier>{9acbd7c3-bf6d-4c59-8577-3ce0f7c83739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Dxlib">
+      <UniqueIdentifier>{4f99046c-374f-458f-a1c1-91e4a5ce2f3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="System\Variable">
+      <UniqueIdentifier>{8a9541bc-f00c-4e1e-aa59-baa99a3133ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{ff96d77b-9598-45ba-bf69-8722ee24ada0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{4e0c11b0-4b9e-411b-9780-736204f621f3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="keyManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="hitFunc.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="main.cpp">
+      <Filter>Main</Filter>
     </ClCompile>
     <ClCompile Include="Float2.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="ShotAdsorption.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="FallBallSample.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="function.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskManager.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="Stage.cpp">
+      <Filter>Scenes</Filter>
     </ClCompile>
     <ClCompile Include="Task.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>System</Filter>
     </ClCompile>
-    <ClCompile Include="main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="ShotBall.cpp">
-      <Filter>ソース ファイル</Filter>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="variable.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Cannon.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Objects\Bubble</Filter>
     </ClCompile>
     <ClCompile Include="FallBall.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>Objects\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="FallBallSample.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ShotAdsorption.cpp">
+      <Filter>Main</Filter>
+    </ClCompile>
+    <ClCompile Include="ShotBall.cpp">
+      <Filter>Objects\Bubble</Filter>
+    </ClCompile>
+    <ClCompile Include="Cannon.cpp">
+      <Filter>Objects\Cannon</Filter>
+    </ClCompile>
+    <ClCompile Include="function.cpp">
+      <Filter>System\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="hitFunc.cpp">
+      <Filter>System\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="keyManager.cpp">
+      <Filter>System\Function</Filter>
+    </ClCompile>
+    <ClCompile Include="variable.cpp">
+      <Filter>System\Variable</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneManager.cpp">
+      <Filter>Scenes</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageManager.cpp">
+      <Filter>System</Filter>
+    </ClCompile>
+    <ClCompile Include="sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationData.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationDataSet.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationPlayer.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationRepository.cpp">
+      <Filter>Animation</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="const.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="keyManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Ball.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="..\dxlib\DxLib.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="hitFunc.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="Float2.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="function.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Stage.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Task.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="TaskManager.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="ShotBall.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Scene.h">
+      <Filter>Scenes</Filter>
     </ClInclude>
-    <ClInclude Include="variable.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="Float2.h">
+      <Filter>System</Filter>
     </ClInclude>
-    <ClInclude Include="Cannon.h">
-      <Filter>ヘッダー ファイル</Filter>
+    <ClInclude Include="const.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="Ball.h">
+      <Filter>Objects\Bubble</Filter>
     </ClInclude>
     <ClInclude Include="FallBall.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>Objects\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="ShotBall.h">
+      <Filter>Objects\Bubble</Filter>
+    </ClInclude>
+    <ClInclude Include="Cannon.h">
+      <Filter>Objects\Cannon</Filter>
+    </ClInclude>
+    <ClInclude Include="..\dxlib\DxLib.h">
+      <Filter>System\Dxlib</Filter>
+    </ClInclude>
+    <ClInclude Include="function.h">
+      <Filter>System\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="hitFunc.h">
+      <Filter>System\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="keyManager.h">
+      <Filter>System\Function</Filter>
+    </ClInclude>
+    <ClInclude Include="variable.h">
+      <Filter>System\Variable</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneManager.h">
+      <Filter>Scenes</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageManager.h">
+      <Filter>System</Filter>
+    </ClInclude>
+    <ClInclude Include="sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationData.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationDataElem.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationDataSet.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationPlayer.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationRepository.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

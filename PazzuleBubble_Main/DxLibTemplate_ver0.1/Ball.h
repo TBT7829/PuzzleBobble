@@ -1,27 +1,27 @@
 #pragma once
 #include "Task.h"
 #include "Float2.h"
-
+#include "ImageManager.h"
 
 
 class Ball : public Task
 {
 public:
-	Ball(int taskId) : Task(taskId)
+	Ball(int taskId, int color) : Task(taskId)
 	{
 		pos.x = pos.y = 0.0f;
 
 		isCheck = false;
 		isSelect = false;
-		colorNum = 0;
+		colorNum = color;
 
 	}
-	Ball(int taskId, Float2 SetPos) : Task(taskId)
+	Ball(int taskId, Float2 SetPos, int color) : Task(taskId)
 	{
 		pos = SetPos;
 		isCheck = false;
 		isSelect = false;
-		colorNum = 0;
+		colorNum = color;
 	}
 	void update()
 	{

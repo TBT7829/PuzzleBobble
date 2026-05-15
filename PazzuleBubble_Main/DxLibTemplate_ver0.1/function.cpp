@@ -195,6 +195,7 @@ int GetRandomExistColor()
 
 			
 			int targetColor = ballTable[r][c]->colorNum;
+			if (targetColor < 0) continue;
 
 			// 2. バッファに同じ色番号が既に入っているかチェック
 			bool isExits = false;

@@ -2,6 +2,7 @@
 
 #include "Task.h"
 #include "Float2.h"
+#include "AnimationPlayer.h"
 
 class ShotBall : public Task
 {

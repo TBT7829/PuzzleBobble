@@ -1,6 +1,5 @@
-#ifndef __CONST_H__
-#define __CONST_H__
-	
+#pragma once
+
 // 方向
 enum Direction {
 	TOP_LEFT = 0,	// 0
@@ -49,6 +48,8 @@ const double BUBBLE_SPEED = 8.0;
 const int BALL_TABLE_COL = 8;
 // ボール配列の行
 const int BALL_TABLE_ROW = 13;
+// 二次元配列の数
+const int BALL_DATA_MAX = 1;
 
 // 偶数行 (y, x) または (row, col)
 const int dirEven[DIR_MAX][2] = {
@@ -73,5 +74,6 @@ const int dirOdd[DIR_MAX][2] = {
 
 const int BALL_COLOR_NUM = 8;
 
+const int IMAGE_INFO_LENGTH = 128;
+const int SOUND_INFO_LENGTH = 20;
 
-#endif

@@ -153,6 +153,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AnimationData.cpp" />
+    <ClCompile Include="AnimationDataSet.cpp" />
+    <ClCompile Include="AnimationPlayer.cpp" />
+    <ClCompile Include="AnimationRepository.cpp" />
     <ClCompile Include="Ball.cpp" />
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="FallBall.cpp" />
@@ -162,18 +166,27 @@
     <ClCompile Include="Float2.cpp" />
     <ClCompile Include="function.cpp" />
     <ClCompile Include="hitFunc.cpp" />
+    <ClCompile Include="ImageManager.cpp" />
     <ClCompile Include="keyManager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShotAdsorption.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="ShotBall.cpp" />
+    <ClCompile Include="sound.cpp" />
+    <ClCompile Include="Stage.cpp" />
     <ClCompile Include="Task.cpp" />
     <ClCompile Include="TaskManager.cpp" />
     <ClCompile Include="variable.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\dxlib\DxLib.h" />
+    <ClInclude Include="AnimationData.h" />
+    <ClInclude Include="AnimationDataElem.h" />
+    <ClInclude Include="AnimationDataSet.h" />
+    <ClInclude Include="AnimationPlayer.h" />
+    <ClInclude Include="AnimationRepository.h" />
     <ClInclude Include="Ball.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -183,8 +196,13 @@
     <ClInclude Include="Float2.h" />
     <ClInclude Include="function.h" />
     <ClInclude Include="hitFunc.h" />
+    <ClInclude Include="ImageManager.h" />
     <ClInclude Include="keyManager.h" />
+    <ClInclude Include="Scene.h" />
+    <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShotBall.h" />
+    <ClInclude Include="sound.h" />
+    <ClInclude Include="Stage.h" />
     <ClInclude Include="Task.h" />
     <ClInclude Include="TaskManager.h" />
     <ClInclude Include="variable.h" />
