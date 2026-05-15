@@ -146,6 +146,9 @@ void Update()
 		}
 	}
 
+
+	CheckGameOver();
+
 	cannon.update();
 }
 
@@ -205,6 +208,16 @@ void Draw()
 	// 天井
 	DrawFillBox(LEFT_WALL_X, 0, RIGHT_WALL_X, ceilingOffsetY, 0x808080);
 	DrawLine(LEFT_WALL_X, ceilingOffsetY, RIGHT_WALL_X, ceilingOffsetY, 0xFFFFFFF, 3);
+
+	// ゲームオーバー線
+	if (CheckGameOver() == false) {
+		DrawLine(LEFT_WALL_X, DEAD_LINE_Y, RIGHT_WALL_X, DEAD_LINE_Y, 0xFFFF00);
+	}
+	else {
+		DrawLine(LEFT_WALL_X, DEAD_LINE_Y, RIGHT_WALL_X, DEAD_LINE_Y, 0xFF0000);
+	}
+	
+
 
 	cannon.draw();
 	pTM->renderAll();

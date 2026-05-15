@@ -228,3 +228,21 @@ void ShiftCeilingDown()
 	// 天井をボール一行分ずらす
 	ceilingOffsetY += BALL_RADIUS * 2.0f;
 }
+
+bool CheckGameOver()
+{
+	for (int r = 0; r < BALL_TABLE_ROW; r++) {
+		for (int c = 0; c < BALL_TABLE_COL; c++) {
+			if (ballTable[r][c] != nullptr) {
+				Float2 pos = GetBubblePos(r, c);
+				// ゲームオーバー
+				if (DEAD_LINE_Y < pos.y + BALL_RADIUS) {
+					// ラインを超えた
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}

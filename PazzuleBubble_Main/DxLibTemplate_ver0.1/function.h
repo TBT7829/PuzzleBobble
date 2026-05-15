@@ -18,6 +18,6 @@ Float2 GetBubblePos(int row, int col);
 
 int GetRandomExistColor();
 
-
-
 void ShiftCeilingDown();
+
+bool CheckGameOver();

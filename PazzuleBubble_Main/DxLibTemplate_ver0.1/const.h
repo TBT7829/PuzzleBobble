@@ -34,6 +34,9 @@ const int RIGHT_WALL_X = 672;
 // 左の壁から右の壁までの幅
 const int PLAY_AREA_WIDTH = RIGHT_WALL_X - LEFT_WALL_X;
 
+// 画面下部のゲームオーバー判定の線
+const int DEAD_LINE_Y = WINDOW_HEIGHT - 120.0f;
+
 // 半径
 const int BALL_RADIUS = 24;
 // 壁からボールをずらしている
