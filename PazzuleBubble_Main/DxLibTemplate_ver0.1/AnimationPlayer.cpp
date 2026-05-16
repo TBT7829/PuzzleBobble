@@ -133,18 +133,18 @@ void AnimationPlayer::render()
 // (こちらは基準となる座標を貰うので、その座標を基準として、つまり相対座標で表示を行う)
 void AnimationPlayer::render(int baseX, int baseY)
 {
-	int imgHandle = ImageManager::getInstance()->getImageHandle(imgId);
+	
 
 	// 自分の座標を相対座標として扱い、引数に貰った基準となる座標を加えて絶対座標に変換する
 	//DrawGraph(x + baseX, y + baseY, imageArray[imgId], TRUE);
-	DrawRectGraph
+	DrawRotaGraph
 	(
 		x + baseX, y + baseY,
-		cropX, cropY,
-		cropW, cropH,
-		imgHandle, TRUE
+		IMAGE_RATE, 0.0f,
+		imgId, TRUE
 	);
 
+	/*
 	// デバッグ表示
 	printfDx("pAnimDataSet: %llu\n", pAnimDataSet);
 	printfDx("imgId: %d\n", imgId);
@@ -156,4 +156,5 @@ void AnimationPlayer::render(int baseX, int baseY)
 	printfDx("cropY: %d\n", cropY);
 	printfDx("cropW: %d\n", cropW);
 	printfDx("cropH: %d\n", cropH);
+	*/
 }

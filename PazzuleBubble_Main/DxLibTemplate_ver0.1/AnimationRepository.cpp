@@ -270,7 +270,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_BLUE_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_BLUE_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_BLUE_BANISH);
@@ -279,7 +279,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 + 1), 0, 32, 31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 
 	pAd = pAds->getAnimationData(A_BUBBLE_BLUE_ENEMY);
@@ -327,7 +327,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_RED_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_RED_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_RED_BANISH);
@@ -336,7 +336,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_RED_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_RED_ENEMY);
@@ -378,7 +378,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_PURPLE_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_PURPLE_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_PURPLE_BANISH);
@@ -387,7 +387,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_PURPLE_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_PURPLE_ENEMY);
@@ -429,7 +429,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_GRAY_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_GRAY_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_GRAY_BANISH);
@@ -438,7 +438,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_GRAY_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_GRAY_ENEMY);
@@ -480,7 +480,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_YELLOW_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_YELLOW_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_YELLOW_BANISH);
@@ -489,7 +489,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_YELLOW_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_YELLOW_ENEMY);
@@ -531,7 +531,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_GREEN_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_GREEN_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_GREEN_BANISH);
@@ -540,7 +540,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_GREEN_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_GREEN_ENEMY);
@@ -582,7 +582,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_ORANGE_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_ORANGE_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_ORANGE_BANISH);
@@ -591,7 +591,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_ORANGE_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_ORANGE_ENEMY);
@@ -633,7 +633,7 @@ void AnimationRepository::initAnimationRepository()
 	pAd->pushSetWait(4);
 	pAd->pushSetImage(pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_WHITE_BURST_3));
 	pAd->pushSetWait(6);
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_WHITE_BANISH);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_WHITE_BANISH);
@@ -642,7 +642,7 @@ void AnimationRepository::initAnimationRepository()
 		pAd->pushSetImage(DerivationGraph(i * (32 +1),0,32,31, imageHandle));
 		pAd->pushSetWait(5);
 	}
-	pAd->pushJump(0);
+	pAd->pushEnd();
 
 	pAd = pAds->getAnimationData(A_BUBBLE_WHITE_ENEMY);
 	imageHandle = pImageManager->getImageHandle(ImageManager::IMAGE_BUBBLE_WHITE_ENEMY);

@@ -1,14 +1,23 @@
 #pragma once
+
+
+#pragma once
 #include "Task.h"
 #include "Float2.h"
 #include "AnimationPlayer.h"
 
 // ÇµÇ¡Ç©ÇËÇ∆ã@î\ï™ÇØÇ»Ç«ÇÇ∑ÇÈÇ»ÇÁDrawableÇåpè≥Ç≥ÇπÇƒçÏÇÈ
-class FallBall : public Task
+class BanishBall : public Task
 {
 public:
-	FallBall(int taskId, float x, float y, float _wait, int _color);
-	virtual ~FallBall();
+	enum {
+		BURST, 
+		CHANGE_BANISH, 
+		BANISH
+	};
+
+	BanishBall(int taskId, float x, float y, int _color);
+	virtual ~BanishBall();
 
 	virtual void update();
 
@@ -20,9 +29,9 @@ public:
 	}
 
 	Float2 pos;
-	Float2 moveVec;
-	float wait;
 	int color;
+
+	int state;
 
 	AnimationPlayer animPlayer;
 };

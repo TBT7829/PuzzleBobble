@@ -40,6 +40,9 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{4e0c11b0-4b9e-411b-9780-736204f621f3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="System\Task">
+      <UniqueIdentifier>{b448d933-e48b-4f0e-aa45-3f03dcbe2d68}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -50,12 +53,6 @@
     </ClCompile>
     <ClCompile Include="Stage.cpp">
       <Filter>Scenes</Filter>
-    </ClCompile>
-    <ClCompile Include="Task.cpp">
-      <Filter>System</Filter>
-    </ClCompile>
-    <ClCompile Include="TaskManager.cpp">
-      <Filter>System</Filter>
     </ClCompile>
     <ClCompile Include="Ball.cpp">
       <Filter>Objects\Bubble</Filter>
@@ -108,16 +105,19 @@
     <ClCompile Include="AnimationRepository.cpp">
       <Filter>Animation</Filter>
     </ClCompile>
+    <ClCompile Include="Task.cpp">
+      <Filter>System\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskManager.cpp">
+      <Filter>System\Task</Filter>
+    </ClCompile>
+    <ClCompile Include="BanishBall.cpp">
+      <Filter>Objects\Bubble</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Stage.h">
       <Filter>Scenes</Filter>
-    </ClInclude>
-    <ClInclude Include="Task.h">
-      <Filter>System</Filter>
-    </ClInclude>
-    <ClInclude Include="TaskManager.h">
-      <Filter>System</Filter>
     </ClInclude>
     <ClInclude Include="Scene.h">
       <Filter>Scenes</Filter>
@@ -178,6 +178,15 @@
     </ClInclude>
     <ClInclude Include="AnimationRepository.h">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Task.h">
+      <Filter>System\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskManager.h">
+      <Filter>System\Task</Filter>
+    </ClInclude>
+    <ClInclude Include="BanishBall.h">
+      <Filter>Objects\Bubble</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

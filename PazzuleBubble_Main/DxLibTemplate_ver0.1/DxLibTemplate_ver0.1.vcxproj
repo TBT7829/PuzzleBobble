@@ -158,6 +158,7 @@
     <ClCompile Include="AnimationPlayer.cpp" />
     <ClCompile Include="AnimationRepository.cpp" />
     <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="BanishBall.cpp" />
     <ClCompile Include="Cannon.cpp" />
     <ClCompile Include="FallBall.cpp" />
     <ClCompile Include="FallBallSample.cpp">
@@ -190,6 +191,7 @@
     <ClInclude Include="Ball.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="BanishBall.h" />
     <ClInclude Include="Cannon.h" />
     <ClInclude Include="const.h" />
     <ClInclude Include="FallBall.h" />

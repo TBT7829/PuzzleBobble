@@ -8,20 +8,62 @@
 #include "hitFunc.h"
 #include "Ball.h"
 #include "FallBall.h"
+#include "BanishBall.h"
 #include "ImageManager.h"
 #include "sound.h"
+#include "AnimationRepository.h"
 
 #include "dxlib/DxLib.h"
 #include<cmath>
 
-ShotBall::ShotBall(int taskId, Float2 startPos, float angle, int color) : Task(taskId)
+ShotBall::ShotBall(int taskId, Float2 startPos, float angle, int color) : Task(taskId), animPlayer(AnimationRepository::getInstance()->getAds(AnimationRepository::AOT_BUBBLE_GRAY), 0, 0)
 {
 	pos = startPos;
 	
 	moveVec.x = cos(angle) * BUBBLE_SPEED;
 	moveVec.y = sin(angle) * BUBBLE_SPEED;
 
-	colorNum = color;
+	AnimationRepository* pAnimRepo = AnimationRepository::getInstance();
+
+	//colorNum = color;
+	switch (color) {
+	case 0:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_RED));
+		break;
+	case 1:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_GREEN));
+		break;
+	case 2:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_BLUE));
+		break;
+	case 3:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_YELLOW));
+		break;
+	case 4:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_ORANGE));
+		break;
+	case 5:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_PURPLE));
+		break;
+	case 6:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_WHITE));
+		break;
+	case 7:
+		colorNum = color;
+		animPlayer.setAds(pAnimRepo->getAds(AnimationRepository::AOT_BUBBLE_GRAY));
+		break;
+	default:
+		abort();
+		break;
+	}
+
 
 }
 
@@ -121,9 +163,16 @@ void ShotBall::update()
 						Ball* pBall = ppCurRow[col];
 						if (pBall == nullptr) continue;
 
+						// 消す対象のボールかチェック
 						if (ballTable[row][col]->isSelect == true) {
+
+							Float2 setPos = GetBubblePos(row, col);
+							// BanishBallを生成
+							pTM->add(new BanishBall(pTM->generateId(), setPos.x, setPos.y, pBall->colorNum));
+
 							pTM->kill(ballTable[row][col]->getTaskId());
 							ballTable[row][col] = nullptr;
+
 						}
 					}
 				}
@@ -184,7 +233,7 @@ void ShotBall::update()
 		TaskManager::getInstance()->kill(getTaskId());
 	}
 
-
+	animPlayer.update();
 
 	// 更新処理の終了
 }
@@ -192,6 +241,7 @@ void ShotBall::update()
 void ShotBall::render()
 {
 	// 色を描画
-	int drawColor = colArray[colorNum];
-	DrawCircle((int)pos.x, (int)pos.y, BALL_RADIUS, drawColor);
+	//int drawColor = colArray[colorNum];
+	//DrawCircle((int)pos.x, (int)pos.y, BALL_RADIUS, drawColor);
+	animPlayer.render(pos.x, pos.y);
 }

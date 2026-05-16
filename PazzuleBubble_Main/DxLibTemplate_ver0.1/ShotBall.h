@@ -21,5 +21,5 @@ public:
 	Float2 pos;
 	Float2 moveVec;
 	int colorNum;
-
+	AnimationPlayer animPlayer;
 };

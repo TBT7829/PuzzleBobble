@@ -8,6 +8,7 @@
 #include "SceneManager.h"
 #include "ImageManager.h"
 #include "sound.h"
+#include"AnimationRepository.h"
 
 #include "dxlib/DxLib.h"
 #include <cmath>
@@ -140,6 +141,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	pImageManager->setImageInfo(ImageManager::IMAGE_BUBBLE_WHITE_ENEMY, "bubble_white_enemy.png");
 
 	pImageManager->loadImageAll();
+
+	AnimationRepository::getInstance()->initAnimationRepository();
 
 	pSM->setSoundInfo(SoundManager::SOUND_STAGE, "PB_PLAY_BGM.m4a");
 	pSM->setSoundInfo(SoundManager::SOUND_SHOT, "SE_SHOT.m4a");

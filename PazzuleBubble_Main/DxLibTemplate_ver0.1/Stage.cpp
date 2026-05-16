@@ -68,7 +68,27 @@ void Stage::init()
 void Stage::update()
 {
 	TaskManager* pTM = TaskManager::getInstance();
+	cannon.update();
 	pTM->updateAll();
+
+
+	// ballTableに入っているボール座標更新
+	for (int row = 0; row < BALL_TABLE_ROW; row++) {
+		Ball** ppCurRow = ballTable[row];
+		for (int col = 0; col < BALL_TABLE_COL; col++) {
+			Ball* pBall = ppCurRow[col];
+
+			if (pBall == nullptr) continue;
+
+			if (pBall->colorNum <= -1) {
+				continue;
+			}
+
+			Float2 _pos = GetBubblePos(row, col);
+			pBall->pos = _pos;
+
+		}
+	}
 
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
 		Ball** ppCurRow = ballTable[row];
@@ -81,9 +101,8 @@ void Stage::update()
 		}
 	}
 
-
 	CheckGameOver();
-	cannon.update();
+	
 }
 
 //--------------------------------------------------------------
@@ -116,26 +135,7 @@ void Stage::render()
 
 	}
 
-	// ballTableに入っているボールを描画
-	for (int row = 0; row < BALL_TABLE_ROW; row++) {
-		Ball** ppCurRow = ballTable[row];
-		for (int col = 0; col < BALL_TABLE_COL; col++) {
-			Ball* pBall = ppCurRow[col];
-
-			if (pBall == nullptr) continue;
-
-			if (pBall->colorNum <= -1) {
-				continue;
-			}
-
-			Float2 pos = GetBubblePos(row, col);
-
-			int drawColor = colArray[pBall->colorNum];
-
-			DrawCircle(pos.x, pos.y, BALL_RADIUS, drawColor);
-
-		}
-	}
+	
 
 	// ステージの壁の線
 	//DrawLine(LEFT_WALL_X, 0, LEFT_WALL_X, WINDOW_HEIGHT, 0xFFFFFF);

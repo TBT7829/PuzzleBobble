@@ -1,6 +1,8 @@
 #ifndef __ANIMATION_PLAYER_H__
 #define __ANIMATION_PLAYER_H__
 
+#include "dxlib/DxLib.h"
+
 // 下のAnimationPlayerクラスでは、AnimationDataSetクラスのポインタしか使用してないので、
 // AnimationDataSetクラスの詳細な内容を知らなくても良い。
 // なぜなら、実体が必要なら中身の詳細が分からないと何Byte取ればいいのか分からないが、
@@ -46,6 +48,21 @@ public:
 	// 相対座標で表示
 	// (こちらは基準となる座標を貰うので、その座標を基準として、つまり相対座標で表示を行う)
 	void render(int baseX, int baseY);
+
+	inline void setAds(AnimationDataSet* _pAnimDataSet)
+	{
+		pAnimDataSet = _pAnimDataSet;
+		imgId = 0;
+		wait = 0;
+		animIdx = 0;
+		animNo = 0;
+		state = AnimationPlayerState::AP_PLAY;
+	}
+
+	inline int getState()
+	{
+		return state;
+	}
 
 	int x;
 	int y;

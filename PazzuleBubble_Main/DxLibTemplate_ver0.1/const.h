@@ -77,3 +77,5 @@ const int BALL_COLOR_NUM = 8;
 const int IMAGE_INFO_LENGTH = 128;
 const int SOUND_INFO_LENGTH = 20;
 
+const int IMAGE_RATE = 3.0f;
+
