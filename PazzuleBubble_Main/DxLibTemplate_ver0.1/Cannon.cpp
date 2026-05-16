@@ -292,7 +292,6 @@ void Cannon::update()
 		break;
 	}
 
-
 	if (8 < shotCount) {
 		ShiftCeilingDown();
 		shotCount = 0;

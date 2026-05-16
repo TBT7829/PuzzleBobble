@@ -152,6 +152,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
 	pSM->loadSoundAll();
 
+	SoundManager::getInstance()->setSoundVolume(100);
+
 	while (ProcessMessage() == 0 && CheckHitKey(KEY_INPUT_ESCAPE) == 0)
 	{
 		//---------------------------------------
@@ -160,7 +162,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		updateKeyState();
 		// ↑ システム更新 ↑
 		//---------------------------------------
-		SoundManager::getInstance()->setSoundVolume(100);
+		SoundManager::getInstance()->setSoundVolume(255);
 		PlaySoundMem(SoundManager::getInstance()->getSoundHandle(SoundManager::SOUND_STAGE), DX_PLAYTYPE_LOOP, FALSE);
 		// シーンマネージャーの更新関数
 		pSceneManager->update();

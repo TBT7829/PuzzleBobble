@@ -114,7 +114,7 @@ void Stage::render()
 
 	int bgImageHandle = ImageManager::getInstance()->getImageHandle(imageBG);
 	DrawGraph(0, 0, bgImageHandle, TRUE);
-
+	/*
 	// 線のみの円でマスを描画する
 	for (int row = 0; row < BALL_TABLE_ROW; row++) {
 		Ball** ppCurRow = ballTable[row];
@@ -134,7 +134,7 @@ void Stage::render()
 		}
 
 	}
-
+	*/
 	
 
 	// ステージの壁の線
