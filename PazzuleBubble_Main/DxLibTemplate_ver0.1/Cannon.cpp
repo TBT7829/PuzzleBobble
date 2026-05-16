@@ -226,6 +226,8 @@ void Cannon::update()
 			abort();
 			break;
 		}
+
+		shotCount++;
 	}
 
 	switch (curColor) {
@@ -289,7 +291,14 @@ void Cannon::update()
 		abort();
 		break;
 	}
+
+
+	if (8 < shotCount) {
+		ShiftCeilingDown();
+		shotCount = 0;
+	}
 	nextAnimPlayer.update();
+
 }
 
 void Cannon::draw()

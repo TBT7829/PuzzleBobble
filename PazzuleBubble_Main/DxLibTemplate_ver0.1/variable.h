@@ -21,4 +21,6 @@ extern float ceilingOffsetY;
 
 extern 	int score;
 
+extern int shotCount;
+
 extern int stage1Data[BALL_DATA_MAX][BALL_TABLE_ROW][BALL_TABLE_COL];

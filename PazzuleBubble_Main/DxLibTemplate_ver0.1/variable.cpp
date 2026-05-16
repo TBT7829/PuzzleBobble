@@ -49,3 +49,5 @@ int stage1Data[BALL_DATA_MAX][BALL_TABLE_ROW][BALL_TABLE_COL] =
 };
 
 int score;
+
+int shotCount;
